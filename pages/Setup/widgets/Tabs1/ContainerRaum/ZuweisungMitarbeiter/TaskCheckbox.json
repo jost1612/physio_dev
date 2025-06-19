@@ -54,7 +54,7 @@
   "originalBottomRow": 119,
   "originalTopRow": 7,
   "parentColumnSpace": 6.09765625,
-  "parentId": "7rnszlf9lg",
+  "parentId": "dsnm6fc2nt",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "rightColumn": 61,
@@ -62,6 +62,6 @@
   "topRow": 7,
   "type": "CHECKBOX_GROUP_WIDGET",
   "version": 2,
-  "widgetId": "91ds0ah5a3",
+  "widgetId": "ajg0np40be",
   "widgetName": "TaskCheckbox"
 }

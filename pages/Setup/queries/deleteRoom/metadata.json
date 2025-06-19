@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6853c2c8c1a69d0f18611020_be42af4c-dd10-400c-bf90-b04110b6fad4",
-  "id": "Setup_updateEmployee",
+  "gitSyncId": "6853c2c8c1a69d0f18611020_cb20dc85-57c3-4cbf-8976-2020b8c7c811",
+  "id": "Setup_deleteRoom",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE public.\"employees\" SET\n    \"name\" = {{TableEmployees.updatedRow.name}}\n  WHERE id = {{TableEmployees.updatedRow.id}}",
+      "body": "DELETE FROM room_tasks WHERE room_id = {{TableRoom.triggeredRow.id}};\nDELETE FROM rooms WHERE id = {{TableRoom.triggeredRow.id}};",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "updateEmployee",
+    "name": "deleteRoom",
     "pageId": "Setup",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

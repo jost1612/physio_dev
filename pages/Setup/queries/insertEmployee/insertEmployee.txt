@@ -1,2 +1,2 @@
 INSERT INTO public."employees" ("name")
-  VALUES ({{Employees.newRow.name}});
+  VALUES ({{TableEmployees.newRow.name}});

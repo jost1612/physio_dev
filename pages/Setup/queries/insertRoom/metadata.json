@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6853c2c8c1a69d0f18611020_be42af4c-dd10-400c-bf90-b04110b6fad4",
-  "id": "Setup_updateEmployee",
+  "gitSyncId": "6853c2c8c1a69d0f18611020_b341f12b-6502-47b0-9dc5-1a8db41ba83c",
+  "id": "Setup_insertRoom",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE public.\"employees\" SET\n    \"name\" = {{TableEmployees.updatedRow.name}}\n  WHERE id = {{TableEmployees.updatedRow.id}}",
+      "body": "INSERT INTO public.\"rooms\" (\"name\")\n  VALUES ({{TableRoom.newRow.name}});",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "updateEmployee",
+    "name": "insertRoom",
     "pageId": "Setup",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6853c2c8c1a69d0f18611020_be42af4c-dd10-400c-bf90-b04110b6fad4",
-  "id": "Setup_updateEmployee",
+  "gitSyncId": "6853c2c8c1a69d0f18611020_babf9160-6a4b-4043-9371-a67b9faa0121",
+  "id": "Setup_updateRoom",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE public.\"employees\" SET\n    \"name\" = {{TableEmployees.updatedRow.name}}\n  WHERE id = {{TableEmployees.updatedRow.id}}",
+      "body": "UPDATE public.\"rooms\" SET\n    \"name\" = {{TableRoom.updatedRow.name}}\n  WHERE id = {{TableRoom.updatedRow.id}}",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "updateEmployee",
+    "name": "updateRoom",
     "pageId": "Setup",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

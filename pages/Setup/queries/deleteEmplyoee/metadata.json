@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "DELETE FROM task_employees WHERE employee_id = {{Employees.triggeredRow.id}};\nDELETE FROM employees WHERE id = {{Employees.triggeredRow.id}};",
+      "body": "DELETE FROM task_employees WHERE employee_id = {{TableEmployees.triggeredRow.id}};\nDELETE FROM employees WHERE id = {{TableEmployees.triggeredRow.id}};",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

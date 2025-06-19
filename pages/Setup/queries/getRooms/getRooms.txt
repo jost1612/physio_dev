@@ -1,1 +1,1 @@
-SELECT * FROM public.rooms
+select * from rooms

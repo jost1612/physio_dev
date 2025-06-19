@@ -54,7 +54,7 @@
   "optionLabel": "name",
   "optionValue": "id",
   "parentColumnSpace": 6.09765625,
-  "parentId": "7rnszlf9lg",
+  "parentId": "dsnm6fc2nt",
   "parentRowSpace": 10,
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
@@ -65,6 +65,6 @@
   "topRow": 0,
   "type": "SELECT_WIDGET",
   "version": 1,
-  "widgetId": "vgzmtd3ggc",
+  "widgetId": "t4sqxp089f",
   "widgetName": "RoomDropdown"
 }
