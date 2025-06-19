@@ -1,2 +1,0 @@
-DELETE FROM public.schedule 
-WHERE room_id = {{selectRoom.selectedOptionValue}};

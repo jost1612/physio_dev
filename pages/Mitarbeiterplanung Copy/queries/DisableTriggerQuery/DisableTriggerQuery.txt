@@ -1,1 +1,0 @@
-ALTER TABLE schedule DISABLE TRIGGER trigger_check_schedule_overlap;

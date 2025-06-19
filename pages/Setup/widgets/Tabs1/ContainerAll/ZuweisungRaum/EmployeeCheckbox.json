@@ -2,7 +2,7 @@
   "accentColor": "#ec4899",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 39,
+  "bottomRow": 12,
   "defaultSelectedValues": "{{ getTaskEmployees.data?.filter(item => item.is_available === true)?.map(item => item.value) || [] }}",
   "dynamicBindingPathList": [
     {

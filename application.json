@@ -30,6 +30,10 @@
   "icon": "saturn",
   "pages": [
     {
+      "id": "Mitarbeiterplanung",
+      "isDefault": true
+    },
+    {
       "id": "Raumbelegung",
       "isDefault": false
     },
@@ -46,31 +50,7 @@
       "isDefault": false
     },
     {
-      "id": "Mitarbeiterplanung Copy",
-      "isDefault": false
-    },
-    {
-      "id": "Excel Export Mitarbeiter Copy",
-      "isDefault": false
-    },
-    {
       "id": "Reporting",
-      "isDefault": false
-    },
-    {
-      "id": "Excel Export Räume Copy",
-      "isDefault": false
-    },
-    {
-      "id": "Raumbelegung Copy",
-      "isDefault": false
-    },
-    {
-      "id": "Mitarbeiterplanung",
-      "isDefault": true
-    },
-    {
-      "id": "Reporting Copy",
       "isDefault": false
     }
   ],

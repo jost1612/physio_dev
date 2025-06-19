@@ -1,2 +1,0 @@
-DELETE FROM schedule
-WHERE id = {{ appsmith.store.scheduleIdToDelete }};

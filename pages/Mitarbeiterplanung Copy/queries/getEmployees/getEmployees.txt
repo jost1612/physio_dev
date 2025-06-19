@@ -1,4 +1,0 @@
-SELECT id, name FROM employees e
-
-
-ORDER BY name;

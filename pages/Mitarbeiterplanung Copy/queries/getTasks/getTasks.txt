@@ -1,4 +1,0 @@
-SELECT id, name, duration_minutes FROM tasks t
-
-
-ORDER BY name;
