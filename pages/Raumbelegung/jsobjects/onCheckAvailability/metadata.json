@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_5ffd64cc-9dc5-4e2c-9125-bacbf660778d",
+  "id": "Raumbelegung_onCheckAvailability",
+  "unpublishedCollection": {
+    "name": "onCheckAvailability",
+    "pageId": "Raumbelegung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

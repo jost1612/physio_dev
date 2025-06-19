@@ -1,0 +1,3 @@
+UPDATE public."employees" SET
+    "name" = {{Employees.updatedRow.name}}
+  WHERE id = {{Employees.updatedRow.id}}

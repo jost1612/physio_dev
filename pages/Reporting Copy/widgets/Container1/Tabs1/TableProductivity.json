@@ -1,0 +1,662 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderColor": "#E0DEDE",
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "borderWidth": "1",
+  "bottomRow": 94,
+  "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
+  "cachedTableData": {},
+  "canFreezeColumn": true,
+  "childStylesheet": {
+    "button": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "editActions": {
+      "discardBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "discardButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+      "saveBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "saveButtonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "iconButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "menuButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "menuColor": "{{appsmith.theme.colors.primaryColor}}"
+    }
+  },
+  "columnOrder": [
+    "Mitarbeiter",
+    "Montag_30min_15min",
+    "Dienstag_30min_15min",
+    "Mittwoch_30min_15min",
+    "Donnerstag_30min_15min",
+    "Freitag_30min_15min",
+    "Gesamt_30min_Slots",
+    "Gesamt_15min_Slots",
+    "xn__Mgliche_Patiententermine_loc",
+    "sort_order",
+    "Mitarbeiter_Color",
+    "Mitarbeiter_TextColor"
+  ],
+  "columnUpdatedAt": 1750256956991,
+  "columnWidthMap": {
+    "Montag_30min_15min": 191
+  },
+  "customIsLoading": false,
+  "customIsLoadingValue": "",
+  "defaultPageSize": 0,
+  "defaultSelectedRowIndex": 0,
+  "defaultSelectedRowIndices": [
+    0
+  ],
+  "delimiter": ",",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "boxShadow"
+    },
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.computedValue"
+    },
+    {
+      "key": "primaryColumns.Montag_30min_15min.computedValue"
+    },
+    {
+      "key": "primaryColumns.Dienstag_30min_15min.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mittwoch_30min_15min.computedValue"
+    },
+    {
+      "key": "primaryColumns.Donnerstag_30min_15min.computedValue"
+    },
+    {
+      "key": "primaryColumns.Freitag_30min_15min.computedValue"
+    },
+    {
+      "key": "primaryColumns.Gesamt_30min_Slots.computedValue"
+    },
+    {
+      "key": "primaryColumns.Gesamt_15min_Slots.computedValue"
+    },
+    {
+      "key": "primaryColumns.xn__Mgliche_Patiententermine_loc.computedValue"
+    },
+    {
+      "key": "primaryColumns.sort_order.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter_Color.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter_TextColor.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.textColor"
+    },
+    {
+      "key": "primaryColumns.Montag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Dienstag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mittwoch_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Donnerstag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Freitag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_30min_Slots.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_15min_Slots.cellBackground"
+    },
+    {
+      "key": "primaryColumns.xn__Mgliche_Patiententermine_loc.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Montag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Dienstag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Mittwoch_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Donnerstag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Freitag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_30min_Slots.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_15min_Slots.textColor"
+    },
+    {
+      "key": "primaryColumns.xn__Mgliche_Patiententermine_loc.textColor"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.textColor"
+    },
+    {
+      "key": "primaryColumns.Montag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Dienstag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mittwoch_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Donnerstag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Freitag_30min_15min.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_30min_Slots.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_15min_Slots.cellBackground"
+    },
+    {
+      "key": "primaryColumns.xn__Mgliche_Patiententermine_loc.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Montag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Dienstag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Mittwoch_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Donnerstag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Freitag_30min_15min.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_30min_Slots.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_15min_Slots.textColor"
+    },
+    {
+      "key": "primaryColumns.xn__Mgliche_Patiententermine_loc.textColor"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "enableClientSideSearch": true,
+  "endOfData": false,
+  "flexVerticalAlignment": "start",
+  "horizontalAlignment": "LEFT",
+  "inlineEditingSaveOption": "ROW_LEVEL",
+  "isLoading": false,
+  "isSortable": true,
+  "isVisible": true,
+  "isVisibleDownload": true,
+  "isVisibleFilters": false,
+  "isVisiblePagination": true,
+  "isVisibleSearch": true,
+  "key": "ll0mxdib47",
+  "label": "Data",
+  "leftColumn": 8,
+  "minWidth": 450,
+  "mobileBottomRow": 28,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 34,
+  "mobileTopRow": 0,
+  "needsErrorInfo": false,
+  "parentColumnSpace": 29.5,
+  "parentId": "kc7xudbxhg",
+  "parentRowSpace": 10,
+  "primaryColumns": {
+    "Dienstag_30min_15min": {
+      "alias": "Dienstag_30min/15min",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table3.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Dienstag_30min/15min\"])) : Dienstag_30min/15min })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Dienstag_30min_15min",
+      "index": 2,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Dienstag 30min/15min",
+      "notation": "standard",
+      "originalId": "Dienstag_30min/15min",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Donnerstag_30min_15min": {
+      "alias": "Donnerstag_30min/15min",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table3.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Donnerstag_30min/15min\"])) : Donnerstag_30min/15min })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Donnerstag_30min_15min",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Donnerstag 30min/15min",
+      "notation": "standard",
+      "originalId": "Donnerstag_30min/15min",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Freitag_30min_15min": {
+      "alias": "Freitag_30min/15min",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table3.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Freitag_30min/15min\"])) : Freitag_30min/15min })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Freitag_30min_15min",
+      "index": 5,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Freitag 30min/15min",
+      "notation": "standard",
+      "originalId": "Freitag_30min/15min",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Gesamt_15min_Slots": {
+      "alias": "Gesamt_15min_Slots",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Gesamt_15min_Slots\"])) : Gesamt_15min_Slots })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Gesamt_15min_Slots",
+      "index": 7,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Gesamt 15min Slots",
+      "notation": "standard",
+      "originalId": "Gesamt_15min_Slots",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Gesamt_30min_Slots": {
+      "alias": "Gesamt_30min_Slots",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Gesamt_30min_Slots\"])) : Gesamt_30min_Slots })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Gesamt_30min_Slots",
+      "index": 6,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Gesamt 30min Slots",
+      "notation": "standard",
+      "originalId": "Gesamt_30min_Slots",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter": {
+      "alias": "Mitarbeiter",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter\"])) : Mitarbeiter })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter",
+      "index": 0,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mitarbeiter",
+      "notation": "standard",
+      "originalId": "Mitarbeiter",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter_Color": {
+      "alias": "Mitarbeiter_Color",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter_Color\"])) : Mitarbeiter_Color })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter_Color",
+      "index": 1,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Mitarbeiter_Color",
+      "notation": "standard",
+      "originalId": "Mitarbeiter_Color",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter_TextColor": {
+      "alias": "Mitarbeiter_TextColor",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter_TextColor\"])) : Mitarbeiter_TextColor })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter_TextColor",
+      "index": 2,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Mitarbeiter_TextColor",
+      "notation": "standard",
+      "originalId": "Mitarbeiter_TextColor",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mittwoch_30min_15min": {
+      "alias": "Mittwoch_30min/15min",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table3.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mittwoch_30min/15min\"])) : Mittwoch_30min/15min })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Mittwoch_30min_15min",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mittwoch 30min/15min",
+      "notation": "standard",
+      "originalId": "Mittwoch_30min/15min",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Montag_30min_15min": {
+      "alias": "Montag_30min/15min",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table3.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Montag_30min/15min\"])) : Montag_30min/15min })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Montag_30min_15min",
+      "index": 1,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Montag 30min/15min",
+      "notation": "standard",
+      "originalId": "Montag_30min/15min",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "sort_order": {
+      "alias": "sort_order",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"sort_order\"])) : sort_order })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "sort_order",
+      "index": 9,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "sort_order",
+      "notation": "standard",
+      "originalId": "sort_order",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "xn__Mgliche_Patiententermine_loc": {
+      "alias": "Mögliche_Patiententermine",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mögliche_Patiententermine\"])) : Mögliche_Patiententermine })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "xn__Mgliche_Patiententermine_loc",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mögliche Patiententermine",
+      "notation": "standard",
+      "originalId": "Mögliche_Patiententermine",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableProductivity.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    }
+  },
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 57,
+  "searchKey": "",
+  "tableData": "{{getProductivity.data}}",
+  "textSize": "0.875rem",
+  "topRow": 0,
+  "totalRecordsCount": 0,
+  "type": "TABLE_WIDGET_V2",
+  "version": 2,
+  "verticalAlignment": "CENTER",
+  "widgetId": "6yh9hyx58j",
+  "widgetName": "TableProductivity"
+}

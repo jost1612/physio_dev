@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_725a2f81-537c-4c46-8a4b-0afeaae92b11",
+  "id": "Mitarbeiterplanung_onSaveRoom",
+  "unpublishedCollection": {
+    "name": "onSaveRoom",
+    "pageId": "Mitarbeiterplanung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

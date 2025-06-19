@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_d6d26115-bcb7-44b3-8d02-1ab353e68bfb",
+  "id": "Raumbelegung_onSaveRoom",
+  "unpublishedCollection": {
+    "name": "onSaveRoom",
+    "pageId": "Raumbelegung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

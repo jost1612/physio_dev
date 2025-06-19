@@ -1,0 +1,7 @@
+UPDATE public.task_employees
+   SET available = CASE 
+                     WHEN employee_id = ANY({{ EmployeeCheckbox.selectedValues }}) 
+                     THEN true
+                     ELSE false
+                   END
+ WHERE task_id = {{ SelectTask.selectedOptionValue }};

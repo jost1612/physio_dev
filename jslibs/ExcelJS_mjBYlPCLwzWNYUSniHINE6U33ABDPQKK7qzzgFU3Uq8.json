@@ -1,0 +1,11 @@
+{
+  "accessor": [
+    "ExcelJS",
+    "regeneratorRuntime"
+  ],
+  "defs": "{\"!name\":\"LIB/ExcelJS\",\"regeneratorRuntime\":{\"wrap\":{\"!type\":\"fn()\",\"prototype\":{}},\"isGeneratorFunction\":{\"!type\":\"fn()\",\"prototype\":{}},\"mark\":{\"!type\":\"fn()\",\"prototype\":{}},\"awrap\":{\"!type\":\"fn()\",\"prototype\":{}},\"AsyncIterator\":{\"!type\":\"fn()\",\"prototype\":{\"next\":{\"!type\":\"fn()\",\"prototype\":{}},\"throw\":{\"!type\":\"fn()\",\"prototype\":{}},\"return\":{\"!type\":\"fn()\",\"prototype\":{}}}},\"async\":{\"!type\":\"fn()\",\"prototype\":{}},\"keys\":{\"!type\":\"fn()\",\"prototype\":{}},\"values\":{\"!type\":\"fn()\",\"prototype\":{}}},\"ExcelJS\":{\"Workbook\":{\"!type\":\"fn()\",\"prototype\":{\"xlsx\":{},\"csv\":{},\"nextId\":{}}},\"ValueType\":{\"Null\":{},\"Merge\":{},\"Number\":{},\"String\":{},\"Date\":{},\"Hyperlink\":{},\"Formula\":{},\"SharedString\":{},\"RichText\":{},\"Boolean\":{},\"Error\":{}},\"FormulaType\":{\"None\":{},\"Master\":{},\"Shared\":{}},\"RelationshipType\":{\"None\":{},\"OfficeDocument\":{},\"Worksheet\":{},\"CalcChain\":{},\"SharedStrings\":{},\"Styles\":{},\"Theme\":{},\"Hyperlink\":{}},\"DocumentType\":{\"Xlsx\":{}},\"ReadingOrder\":{\"LeftToRight\":{},\"RightToLeft\":{}},\"ErrorValue\":{\"NotApplicable\":{},\"Ref\":{},\"Name\":{},\"DivZero\":{},\"Null\":{},\"Value\":{},\"Num\":{}}}}",
+  "name": "ExcelJS",
+  "uidString": "ExcelJS_regeneratorRuntime_https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js",
+  "url": "https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js",
+  "version": "4.4.0"
+}

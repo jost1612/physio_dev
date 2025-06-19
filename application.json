@@ -1,0 +1,100 @@
+{
+  "appIsExample": false,
+  "appLayout": {
+    "type": "FLUID"
+  },
+  "applicationDetail": {
+    "appPositioning": {
+      "type": "FIXED"
+    },
+    "navigationSetting": {
+      "colorStyle": "light",
+      "logoAssetId": "",
+      "logoConfiguration": "logoAndApplicationTitle",
+      "navStyle": "stacked",
+      "orientation": "top",
+      "position": "static",
+      "showNavbar": true,
+      "showSignIn": true
+    },
+    "themeSetting": {
+      "appMaxWidth": "LARGE",
+      "density": 1.0,
+      "sizing": 1.0
+    }
+  },
+  "applicationVersion": 2,
+  "collapseInvisibleWidgets": true,
+  "color": "#E4D8CC",
+  "evaluationVersion": 2,
+  "icon": "saturn",
+  "pages": [
+    {
+      "id": "Raumbelegung",
+      "isDefault": false
+    },
+    {
+      "id": "Setup",
+      "isDefault": false
+    },
+    {
+      "id": "Excel Export Räume",
+      "isDefault": false
+    },
+    {
+      "id": "Excel Export Mitarbeiter",
+      "isDefault": false
+    },
+    {
+      "id": "Mitarbeiterplanung Copy",
+      "isDefault": false
+    },
+    {
+      "id": "Excel Export Mitarbeiter Copy",
+      "isDefault": false
+    },
+    {
+      "id": "Reporting",
+      "isDefault": false
+    },
+    {
+      "id": "Excel Export Räume Copy",
+      "isDefault": false
+    },
+    {
+      "id": "Raumbelegung Copy",
+      "isDefault": false
+    },
+    {
+      "id": "Mitarbeiterplanung",
+      "isDefault": true
+    },
+    {
+      "id": "Reporting Copy",
+      "isDefault": false
+    }
+  ],
+  "unpublishedAppLayout": {
+    "type": "FLUID"
+  },
+  "unpublishedApplicationDetail": {
+    "appPositioning": {
+      "type": "FIXED"
+    },
+    "navigationSetting": {
+      "colorStyle": "light",
+      "logoAssetId": "",
+      "logoConfiguration": "logoAndApplicationTitle",
+      "navStyle": "stacked",
+      "orientation": "top",
+      "position": "static",
+      "showNavbar": true,
+      "showSignIn": true
+    },
+    "themeSetting": {
+      "appMaxWidth": "LARGE",
+      "density": 1.0,
+      "sizing": 1.0
+    }
+  }
+}

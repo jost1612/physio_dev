@@ -1,0 +1,88 @@
+/*
+ * Dieses Skript analysiert die Tabelle 'schedule', um die Anzahl der verfügbaren
+ * 30-Minuten-Blöcke für jeden Mitarbeiter zu ermitteln, gruppiert nach Wochentag.
+ *
+ * **FINALE KORREKTUR**: Die Abfrage verwendet nun AUSSCHLIESSLICH die Spalte
+ * `day_abbrev` zur Gruppierung der Tage und ignoriert die Spalte `day` vollständig,
+ * wie vom Benutzer gefordert.
+ *
+ * WICHTIGER HINWEIS: Diese Abfrage geht davon aus, dass die zu analysierenden
+ * Daten aus einer einzigen Woche stammen. Wenn Daten aus mehreren Wochen vorhanden sind,
+ * kann die Berechnung der Lücke zwischen den Wochen (z.B. von Freitag zu Montag)
+ * zu falschen Ergebnissen führen, da nur nach dem Wochentag-Kürzel ('MO', 'DI', etc.)
+ * gruppiert wird.
+ */
+WITH employee_gaps AS (
+  -- Schritt 1: Finde für jeden Termin den Start des nächsten Termins am selben Wochentag.
+  SELECT
+    employee_id,
+    day_abbrev,
+    end_time,
+    LEAD(start_time, 1) OVER (
+      PARTITION BY
+        employee_id,
+        day_abbrev -- Partitionierung erfolgt jetzt nur noch nach Mitarbeiter und Wochentag-Kürzel.
+      ORDER BY
+        start_time
+    ) AS next_start_time
+  FROM
+    public.schedule
+  WHERE
+    employee_id IS NOT NULL OR
+	employee_id <> 53
+), gap_durations AS (
+  -- Schritt 2: Berechne die Dauer der Lücke zwischen den Terminen.
+  SELECT
+    employee_id,
+    day_abbrev,
+    (next_start_time - end_time) AS gap_interval
+  FROM
+    employee_gaps
+  WHERE
+    next_start_time IS NOT NULL
+    AND next_start_time > end_time
+), calculated_slots AS (
+  -- Schritt 3: Berechne, wie viele volle 30-Minuten-Blöcke in die Lücke passen.
+  SELECT
+    employee_id,
+    day_abbrev,
+    -- Teilt die Gesamtdauer der Lücke in Sekunden durch 1800 (30 Min * 60 Sek).
+    FLOOR(EXTRACT(EPOCH FROM gap_interval) / 1800) AS num_available_slots
+  FROM
+    gap_durations
+  WHERE
+    gap_interval >= '30 minutes' :: interval -- Die Lücke muss mindestens 30 Minuten groß sein.
+)
+-- Schritt 4: Summiere die verfügbaren Blöcke pro Mitarbeiter und Wochentag.
+SELECT
+  e.name AS employee_name,
+  CASE s.day_abbrev
+      WHEN 'MO' THEN 'Montag'
+      WHEN 'DI' THEN 'Dienstag'
+      WHEN 'MI' THEN 'Mittwoch'
+      WHEN 'DO' THEN 'Donnerstag'
+      WHEN 'FR' THEN 'Freitag'
+      WHEN 'SA' THEN 'Samstag'
+      WHEN 'SO' THEN 'Sonntag'
+      ELSE s.day_abbrev
+  END AS weekday,
+  SUM(s.num_available_slots) :: BIGINT AS total_free_30min_slots
+FROM
+  calculated_slots s
+  INNER JOIN public.employees e ON s.employee_id = e.id
+WHERE
+  s.num_available_slots > 0 AND day_abbrev = {{SelectDay.selectedOptionValue}}
+GROUP BY
+  e.name,
+  s.day_abbrev
+ORDER BY
+  employee_name,
+  CASE s.day_abbrev
+      WHEN 'MO' THEN 1
+      WHEN 'DI' THEN 2
+      WHEN 'MI' THEN 3
+      WHEN 'DO' THEN 4
+      WHEN 'FR' THEN 5
+      WHEN 'SA' THEN 6
+      WHEN 'SO' THEN 7
+  END;

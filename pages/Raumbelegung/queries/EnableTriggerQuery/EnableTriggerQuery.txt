@@ -1,0 +1,1 @@
+ALTER TABLE schedule ENABLE TRIGGER trigger_check_schedule_overlap;

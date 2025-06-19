@@ -1,0 +1,64 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 4,
+  "boxShadow": "none",
+  "defaultOptionValue": "Mo",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "lvcygpxhf6",
+  "labelAlignment": "left",
+  "labelPosition": "Top",
+  "labelText": "Wochentag",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 11,
+  "mobileLeftColumn": 21,
+  "mobileRightColumn": 41,
+  "mobileTopRow": 4,
+  "needsErrorInfo": false,
+  "onOptionChange": "{{getProductiveTime.run();\ngetAdminTime.run()}}",
+  "optionLabel": "name",
+  "optionValue": "code",
+  "parentColumnSpace": 17.09375,
+  "parentId": "ebq4o1a86y",
+  "parentRowSpace": 10,
+  "placeholderText": "Select option",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 20,
+  "serverSideFiltering": false,
+  "sourceData": "[\n  {\n    \"name\": \"Montag\",\n    \"code\": \"Mo\"\n  },\n  {\n    \"name\": \"Dienstag\",\n    \"code\": \"Di\"\n  },\n  {\n    \"name\": \"Mittwoch\",\n    \"code\": \"Mi\"\n  },\n  {\n    \"name\": \"Donnerstag\",\n    \"code\": \"Do\"\n  },\n  {\n    \"name\": \"Freitag\",\n    \"code\": \"Fr\"\n  }\n]",
+  "topRow": 0,
+  "type": "SELECT_WIDGET",
+  "version": 1,
+  "widgetId": "munvjeitne",
+  "widgetName": "SelectDay"
+}

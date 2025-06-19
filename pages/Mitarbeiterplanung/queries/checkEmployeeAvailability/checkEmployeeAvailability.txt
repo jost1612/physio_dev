@@ -1,0 +1,34 @@
+SELECT 
+  s.id,
+  s.start_time,
+  s.end_time,
+  s.day_abbrev,
+  s.employee_id,
+  t.name as task_name,
+  r.name as room_name,
+  -- ✅ DEBUG: Zusätzliche Informationen für Troubleshooting
+  '{{ this.params.startTime }}' as requested_start,
+  '{{ this.params.endTime }}' as requested_end,
+  '{{ this.params.dayAbbrev }}' as requested_day,
+  {{ this.params.employeeId }} as requested_employee
+FROM public.schedule s
+LEFT JOIN public.tasks t ON s.task_id = t.id
+LEFT JOIN public.rooms r ON s.room_id = r.id  
+WHERE s.employee_id = {{ this.params.employeeId }}
+  AND s.day_abbrev = '{{ this.params.dayAbbrev }}'
+  AND (
+    -- ✅ KORRIGIERTE Überschneidungslogik für Zeiträume
+    -- Fall 1: Existierender Termin startet vor/bei unserem Start und endet nach unserem Start
+    (s.start_time <= TIME '{{ this.params.startTime }}' 
+     AND s.end_time > TIME '{{ this.params.startTime }}')
+    OR 
+    -- Fall 2: Existierender Termin startet vor unserem Ende und endet bei/nach unserem Ende  
+    (s.start_time < TIME '{{ this.params.endTime }}' 
+     AND s.end_time >= TIME '{{ this.params.endTime }}')
+    OR
+    -- Fall 3: Existierender Termin liegt komplett innerhalb unseres Zeitraums
+    (s.start_time >= TIME '{{ this.params.startTime }}' 
+     AND s.end_time <= TIME '{{ this.params.endTime }}')
+  )
+-- ✅ SORTIERUNG für bessere Übersicht  
+ORDER BY s.start_time;

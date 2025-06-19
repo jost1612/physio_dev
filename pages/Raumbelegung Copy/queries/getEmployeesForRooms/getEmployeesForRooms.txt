@@ -1,0 +1,13 @@
+SELECT distinct id, name FROM employees e 
+
+inner join task_employees te
+on te.employee_id=e.id
+and te.available = true
+
+inner join room_tasks rt
+on rt.task_id = te.task_id
+and rt.available = true
+
+where rt.room_id={{selectRoom.selectedOptionValue}}
+
+ORDER BY name;

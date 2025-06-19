@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_225152b7-fd0c-447f-9c13-cc0e2df63e39",
+  "id": "Excel Export Mitarbeiter_excelExport",
+  "unpublishedCollection": {
+    "name": "excelExport",
+    "pageId": "Excel Export Mitarbeiter",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

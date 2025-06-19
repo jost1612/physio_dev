@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_458245ba-3c3b-4020-bea7-ee26bf25bf1a",
+  "id": "Mitarbeiterplanung_onCheckAvailability",
+  "unpublishedCollection": {
+    "name": "onCheckAvailability",
+    "pageId": "Mitarbeiterplanung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

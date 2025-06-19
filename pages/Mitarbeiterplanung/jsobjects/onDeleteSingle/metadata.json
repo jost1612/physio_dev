@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_361e5fcd-ea72-4077-85e0-83353fcf0b32",
+  "id": "Mitarbeiterplanung_onDeleteSingle",
+  "unpublishedCollection": {
+    "name": "onDeleteSingle",
+    "pageId": "Mitarbeiterplanung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

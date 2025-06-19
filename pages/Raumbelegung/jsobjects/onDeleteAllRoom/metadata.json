@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6853c2c8c1a69d0f18611020_09fa0792-45d8-4d27-9af2-c7214b875483",
+  "id": "Raumbelegung_onDeleteAllRoom",
+  "unpublishedCollection": {
+    "name": "onDeleteAllRoom",
+    "pageId": "Raumbelegung",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}
