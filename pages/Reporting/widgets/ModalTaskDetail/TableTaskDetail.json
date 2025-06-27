@@ -1,0 +1,661 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderColor": "#E0DEDE",
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "borderWidth": "1",
+  "bottomRow": 93,
+  "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
+  "cachedTableData": {},
+  "canFreezeColumn": true,
+  "childStylesheet": {
+    "button": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "editActions": {
+      "discardBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "discardButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+      "saveBorderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "saveButtonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "iconButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "buttonColor": "{{appsmith.theme.colors.primaryColor}}"
+    },
+    "menuButton": {
+      "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+      "boxShadow": "none",
+      "menuColor": "{{appsmith.theme.colors.primaryColor}}"
+    }
+  },
+  "columnOrder": [
+    "Mitarbeiter",
+    "Mitarbeiter_Color",
+    "Mitarbeiter_TextColor",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Gesamt",
+    "Gesamt_Stunden1",
+    "Dynamic_Color",
+    "Dynamic_TextColor"
+  ],
+  "columnUpdatedAt": 1750767194724,
+  "columnWidthMap": {},
+  "customIsLoading": false,
+  "customIsLoadingValue": "",
+  "defaultPageSize": 0,
+  "defaultSelectedRowIndex": 0,
+  "defaultSelectedRowIndices": [
+    0
+  ],
+  "delimiter": ",",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "boxShadow"
+    },
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter_Color.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter_TextColor.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.textColor"
+    },
+    {
+      "key": "primaryColumns.Montag.computedValue"
+    },
+    {
+      "key": "primaryColumns.Dienstag.computedValue"
+    },
+    {
+      "key": "primaryColumns.Mittwoch.computedValue"
+    },
+    {
+      "key": "primaryColumns.Donnerstag.computedValue"
+    },
+    {
+      "key": "primaryColumns.Freitag.computedValue"
+    },
+    {
+      "key": "primaryColumns.Gesamt.computedValue"
+    },
+    {
+      "key": "primaryColumns.Montag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Montag.textColor"
+    },
+    {
+      "key": "primaryColumns.Dienstag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Dienstag.textColor"
+    },
+    {
+      "key": "primaryColumns.Mittwoch.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mittwoch.textColor"
+    },
+    {
+      "key": "primaryColumns.Donnerstag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Donnerstag.textColor"
+    },
+    {
+      "key": "primaryColumns.Freitag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Freitag.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_Stunden1.computedValue"
+    },
+    {
+      "key": "primaryColumns.Gesamt_Stunden1.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_Stunden1.textColor"
+    },
+    {
+      "key": "primaryColumns.Dynamic_Color.computedValue"
+    },
+    {
+      "key": "primaryColumns.Dynamic_TextColor.computedValue"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mitarbeiter.textColor"
+    },
+    {
+      "key": "primaryColumns.Montag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Montag.textColor"
+    },
+    {
+      "key": "primaryColumns.Dienstag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Dienstag.textColor"
+    },
+    {
+      "key": "primaryColumns.Mittwoch.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Mittwoch.textColor"
+    },
+    {
+      "key": "primaryColumns.Donnerstag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Donnerstag.textColor"
+    },
+    {
+      "key": "primaryColumns.Freitag.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Freitag.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt.textColor"
+    },
+    {
+      "key": "primaryColumns.Gesamt_Stunden1.cellBackground"
+    },
+    {
+      "key": "primaryColumns.Gesamt_Stunden1.textColor"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "enableClientSideSearch": true,
+  "endOfData": false,
+  "flexVerticalAlignment": "start",
+  "horizontalAlignment": "LEFT",
+  "inlineEditingSaveOption": "ROW_LEVEL",
+  "isLoading": false,
+  "isSortable": true,
+  "isVisible": true,
+  "isVisibleDownload": false,
+  "isVisibleFilters": false,
+  "isVisiblePagination": false,
+  "isVisibleSearch": true,
+  "key": "ll0mxdib47",
+  "label": "Data",
+  "leftColumn": 1,
+  "minWidth": 450,
+  "mobileBottomRow": 34,
+  "mobileLeftColumn": 1,
+  "mobileRightColumn": 35,
+  "mobileTopRow": 6,
+  "needsErrorInfo": false,
+  "originalBottomRow": 34,
+  "originalTopRow": 6,
+  "parentColumnSpace": 6.9375,
+  "parentId": "els3co4tne",
+  "parentRowSpace": 10,
+  "primaryColumnId": "Mitarbeiter",
+  "primaryColumns": {
+    "Dienstag": {
+      "alias": "Dienstag",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Dienstag\"])) : Dienstag })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Dienstag",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Dienstag",
+      "notation": "standard",
+      "originalId": "Dienstag",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Donnerstag": {
+      "alias": "Donnerstag",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Donnerstag\"])) : Donnerstag })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Donnerstag",
+      "index": 6,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Donnerstag",
+      "notation": "standard",
+      "originalId": "Donnerstag",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Dynamic_Color": {
+      "alias": "Dynamic_Color",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Dynamic_Color\"])) : Dynamic_Color })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Dynamic_Color",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Dynamic_Color",
+      "notation": "standard",
+      "originalId": "Dynamic_Color",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Dynamic_TextColor": {
+      "alias": "Dynamic_TextColor",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Dynamic_TextColor\"])) : Dynamic_TextColor })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Dynamic_TextColor",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Dynamic_TextColor",
+      "notation": "standard",
+      "originalId": "Dynamic_TextColor",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Freitag": {
+      "alias": "Freitag",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Freitag\"])) : Freitag })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Freitag",
+      "index": 7,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Freitag",
+      "notation": "standard",
+      "originalId": "Freitag",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Gesamt": {
+      "alias": "Gesamt",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Gesamt\"])) : Gesamt })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Gesamt",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Gesamt",
+      "notation": "standard",
+      "originalId": "Gesamt",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Gesamt_Stunden1": {
+      "alias": "Gesamt Stunden",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = Table1.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Gesamt Stunden\"])) : Gesamt Stunden })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Gesamt_Stunden1",
+      "index": 9,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Gesamt Stunden",
+      "notation": "standard",
+      "originalId": "Gesamt Stunden",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter": {
+      "alias": "Mitarbeiter",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter\"])) : Mitarbeiter })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter",
+      "index": 0,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mitarbeiter",
+      "notation": "standard",
+      "originalId": "Mitarbeiter",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter_Color": {
+      "alias": "Mitarbeiter_Color",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter_Color\"])) : Mitarbeiter_Color })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter_Color",
+      "index": 1,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Mitarbeiter_Color",
+      "notation": "standard",
+      "originalId": "Mitarbeiter_Color",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mitarbeiter_TextColor": {
+      "alias": "Mitarbeiter_TextColor",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mitarbeiter_TextColor\"])) : Mitarbeiter_TextColor })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mitarbeiter_TextColor",
+      "index": 2,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "Mitarbeiter_TextColor",
+      "notation": "standard",
+      "originalId": "Mitarbeiter_TextColor",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Mittwoch": {
+      "alias": "Mittwoch",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Mittwoch\"])) : Mittwoch })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Mittwoch",
+      "index": 5,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mittwoch",
+      "notation": "standard",
+      "originalId": "Mittwoch",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "Montag": {
+      "alias": "Montag",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_Color)) : currentRow.Mitarbeiter_Color })()}}",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Montag\"])) : Montag })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "Montag",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Montag",
+      "notation": "standard",
+      "originalId": "Montag",
+      "sticky": "",
+      "textColor": "{{(() => { const tableData = TableTaskDetail.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow.Mitarbeiter_TextColor)) : currentRow.Mitarbeiter_TextColor })()}}",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    }
+  },
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 62,
+  "searchKey": "",
+  "serverSidePaginationEnabled": true,
+  "tableData": "{{getTaskDetail.data}}",
+  "textSize": "0.875rem",
+  "topRow": 6,
+  "totalRecordsCount": 0,
+  "type": "TABLE_WIDGET_V2",
+  "version": 2,
+  "verticalAlignment": "CENTER",
+  "widgetId": "eaihs1csj1",
+  "widgetName": "TableTaskDetail"
+}

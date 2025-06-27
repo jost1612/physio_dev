@@ -1,0 +1,1 @@
+select * FROM public.teams order by name

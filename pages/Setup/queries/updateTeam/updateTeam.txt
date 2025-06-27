@@ -1,0 +1,3 @@
+UPDATE public."teams" SET
+    "name" = '{{TableTeam.updatedRow.name}}'
+  WHERE id = {{TableTeam.updatedRow.id}}

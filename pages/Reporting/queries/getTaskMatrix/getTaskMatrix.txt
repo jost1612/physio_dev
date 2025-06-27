@@ -1,0 +1,132 @@
+WITH task_colors AS (
+  -- ✅ EINFACHE FARBBERECHNUNG
+  SELECT DISTINCT
+    t.id as task_id,
+    t.name as task_name,
+    
+    -- Hintergrundfarbe direkt aus Tabelle
+    COALESCE(t.color, '#E8F4FD') as background_color,
+    
+    -- ✅ TEXTFARBE basierend auf Hintergrundfarbe berechnen
+    CASE 
+      WHEN t.color IS NULL THEN '#2D3748'
+      WHEN LENGTH(t.color) != 7 OR SUBSTRING(t.color, 1, 1) != '#' THEN '#2D3748'
+      ELSE
+        CASE 
+          -- Helligkeit der Hintergrundfarbe berechnen (Luminance-Formel)
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 180 THEN '#1A202C'  -- Sehr dunkler Text für sehr helle Farben
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 140 THEN '#2D3748'  -- Dunkler Text für helle Farben
+          -- Für mittlere Farben (wie Violett) → Weißer Text für besseren Kontrast
+          ELSE '#FFFFFF'  -- Weißer Text für dunkle und mittlere Farben
+        END
+    END as text_color
+    
+  FROM tasks t
+  WHERE t.name IS NOT NULL
+),
+
+task_assignments AS (
+  -- Alle Task-Zuweisungen mit Mitarbeiter-Informationen
+  SELECT 
+    s.day_abbrev,
+    s.task_id,
+    s.employee_id,
+    s.start_time,
+    s.end_time,
+    s.room_id,
+    t.name as task_name,
+    e.name as employee_name,
+    r.name as room_name,
+    -- Kombinierter Mitarbeiter-Text mit Zeitinfo
+    CASE 
+      WHEN e.name IS NOT NULL THEN 
+        e.name || ' (' || 
+        to_char(s.start_time, 'HH24:MI') || '-' || 
+        to_char(s.end_time, 'HH24:MI') || ')'
+      ELSE 
+        'Unbesetzt'
+    END as employee_with_time,
+    -- Dauer in Minuten berechnen
+    EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 as duration_minutes
+    
+  FROM schedule s
+  LEFT JOIN tasks t ON s.task_id = t.id
+  LEFT JOIN employees e ON s.employee_id = e.id
+  LEFT JOIN rooms r ON s.room_id = r.id
+  WHERE t.name IS NOT NULL
+	AND s.task_id = ANY({{ MultiSelectTasks.selectedOptionValues || 1 }}::integer[])
+	AND s.version_id = {{SelectVersion.selectedOptionValue}}
+),
+
+task_stats AS (
+  -- Task-Statistiken
+  SELECT 
+    task_id,
+    task_name,
+    COUNT(DISTINCT employee_id) as unique_employees,
+    COUNT(*) as total_bookings,
+    ROUND(AVG(duration_minutes), 0) as avg_duration,
+    ROUND(SUM(duration_minutes) / 60.0, 2) as total_hours
+  FROM task_assignments 
+  WHERE employee_id IS NOT NULL
+  GROUP BY task_id, task_name
+)
+
+-- ✅ HAUPTQUERY: Task-Matrix mit einfachen Farben
+SELECT 
+  ta.task_name as "Task",
+  
+  -- ✅ WOCHENTAGE (nur Inhalte)
+  STRING_AGG(
+    CASE WHEN ta.day_abbrev = 'Mo' THEN ta.employee_with_time END, 
+    CHR(10)
+  ) as "Mo",
+  
+  STRING_AGG(
+    CASE WHEN ta.day_abbrev = 'Di' THEN ta.employee_with_time END, 
+    CHR(10)
+  ) as "Di",
+  
+  STRING_AGG(
+    CASE WHEN ta.day_abbrev = 'Mi' THEN ta.employee_with_time END, 
+    CHR(10)
+  ) as "Mi",
+  
+  STRING_AGG(
+    CASE WHEN ta.day_abbrev = 'Do' THEN ta.employee_with_time END, 
+    CHR(10)
+  ) as "Do",
+  
+  STRING_AGG(
+    CASE WHEN ta.day_abbrev = 'Fr' THEN ta.employee_with_time END, 
+    CHR(10)
+  ) as "Fr",
+  
+  -- ✅ EINFACHE FARBPALETTE
+  tc.background_color as "BackgroundColor",  -- Direkt aus tasks.color
+  tc.text_color as "TextColor",              -- Berechnet basierend auf Hintergrund
+  
+  -- ✅ STATISTIKEN
+  COALESCE(ts.total_hours, 0) as "Stunden_Gesamt",
+  COALESCE(ts.total_bookings, 0) as "Buchungen_Anzahl",
+  COALESCE(ts.unique_employees, 0) as "Mitarbeiter_Anzahl"
+
+FROM task_assignments ta
+LEFT JOIN task_colors tc ON ta.task_id = tc.task_id
+LEFT JOIN task_stats ts ON ta.task_id = ts.task_id
+GROUP BY 
+  ta.task_name, 
+  tc.background_color, 
+  tc.text_color,
+  ts.total_hours,
+  ts.total_bookings,
+  ts.unique_employees
+ORDER BY ta.task_name;

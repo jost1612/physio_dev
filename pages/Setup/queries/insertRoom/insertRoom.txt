@@ -1,0 +1,2 @@
+INSERT INTO public."rooms" ("name")
+  VALUES ({{TableRoom.newRow.name}});

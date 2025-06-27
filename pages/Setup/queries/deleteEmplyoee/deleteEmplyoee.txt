@@ -1,0 +1,2 @@
+DELETE FROM task_employees WHERE employee_id = {{TableEmployees.triggeredRow.id}};
+DELETE FROM employees WHERE id = {{TableEmployees.triggeredRow.id}};

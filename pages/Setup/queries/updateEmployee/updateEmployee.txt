@@ -1,0 +1,4 @@
+UPDATE public."employees" SET
+    "name" = '{{TableEmployees.updatedRow.name}}',
+		"team_id" = {{TableEmployees.updatedRow.team_id}}
+  WHERE id = {{TableEmployees.updatedRow.id}}

@@ -1,0 +1,3 @@
+DELETE FROM public."schedule"
+  WHERE employee_id = {{SelectEmployee.selectedOptionValue}}
+	--AND version_id= {{SelectVersionDelete.selectedOptionValue}}

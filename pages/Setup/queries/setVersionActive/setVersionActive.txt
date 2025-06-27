@@ -1,0 +1,5 @@
+UPDATE public."planning_versions"
+SET "is_active" = FALSE;
+UPDATE public."planning_versions" SET
+    "is_active" = true
+  WHERE id = {{SelectVersionActive.selectedOptionValue}};

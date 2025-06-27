@@ -1,0 +1,19 @@
+INSERT INTO public.schedule (
+  room_id, 
+  employee_id,
+  task_id, 
+  day_abbrev, 
+  start_time, 
+  end_time, 
+  day,
+  created_from
+) VALUES (
+  {{selectRoom.selectedOptionValue}},
+  {{ this.params.employeeId }},
+  {{ this.params.taskId }},
+  '{{ this.params.dayAbbrev }}',
+  '{{ this.params.startTime }}',
+  '{{ this.params.endTime }}',
+  '{{ this.params.date }}'::date,
+  'room'
+);

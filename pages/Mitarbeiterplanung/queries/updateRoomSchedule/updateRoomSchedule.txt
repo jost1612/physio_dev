@@ -1,0 +1,11 @@
+-- Query Name: updateRoomSchedule
+UPDATE public.schedule
+SET
+  task_id = {{appsmith.store.newTaskId}},
+  employee_id = {{appsmith.store.newEmployeeId}},
+  room_id = {{selectEmployee.selectedOptionValue}},
+  day_abbrev = {{appsmith.store.newDayAbbrev}},
+  start_time = {{appsmith.store.newStartTime}}::time,
+  end_time = {{appsmith.store.newEndTime}}::time,
+  day = {{appsmith.store.newDate}}::date
+WHERE id = {{appsmith.store.scheduleIdToUpdate}};

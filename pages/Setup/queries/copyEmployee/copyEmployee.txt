@@ -1,0 +1,4 @@
+SELECT copy_employee_schedule(
+    {{ SelectOldEmployee.selectedOptionValue }},
+    {{ SelectNewEmployee.selectedOptionValue }}
+);

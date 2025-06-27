@@ -1,0 +1,52 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 12,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "cmvnzojj5c",
+  "leftColumn": 47,
+  "minWidth": 120,
+  "mobileBottomRow": 12,
+  "mobileLeftColumn": 43,
+  "mobileRightColumn": 59,
+  "mobileTopRow": 8,
+  "needsErrorInfo": false,
+  "onClick": "{{deleteEmployeeVersion.run().then(() => {\n  showAlert('Die Version ' + SelectVersionDelete.selectedOptionLabel + ' wurde erfolgreich gelöscht.', 'success');\n}).catch(() => {\n  showAlert('Der Löschvorgang ist fehlgeschlagen.', 'error');\n});}}",
+  "originalBottomRow": 13,
+  "originalTopRow": 8,
+  "parentColumnSpace": 8.219482421875,
+  "parentId": "xdt76fdbu9",
+  "parentRowSpace": 10,
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 62,
+  "text": "Delete",
+  "topRow": 7,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "w2p747b4cz",
+  "widgetName": "ButtonDeleteVersionCopy"
+}

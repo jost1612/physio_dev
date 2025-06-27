@@ -1,0 +1,7 @@
+UPDATE public.room_tasks
+   SET available = CASE 
+                     WHEN task_id = ANY({{ TaskCheckbox.selectedValues }})
+                     THEN true
+                     ELSE false
+                   END
+ WHERE room_id = {{ SelectRoom.selectedOptionValue }};

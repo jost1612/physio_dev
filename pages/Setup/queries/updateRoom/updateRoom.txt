@@ -1,0 +1,3 @@
+UPDATE public."rooms" SET
+    "name" = '{{TableRoom.updatedRow.name}}'
+  WHERE id = {{TableRoom.updatedRow.id}}

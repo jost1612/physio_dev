@@ -1,0 +1,388 @@
+WITH
+-- Zeitraster definieren (15-Minuten-Slots von 7:00 bis 18:00)
+time_grid AS (
+  SELECT
+    d.day_abbrev,
+    e.id as employee_id,
+    e.name as employee_name,
+    t.slot_time::time as slot_time,
+    (t.slot_time + INTERVAL '15 minutes')::time as slot_end
+  FROM (VALUES ('Mo'), ('Di'), ('Mi'), ('Do'), ('Fr')) d(day_abbrev)
+  CROSS JOIN employees e
+  CROSS JOIN (
+    SELECT generate_series(
+      TIMESTAMP '2024-01-01 07:00:00',
+      TIMESTAMP '2024-01-01 17:45:00',
+      '15 minutes'::interval
+    ) as slot_time
+  ) t
+  WHERE e.id <> 53
+),
+
+-- Alle gebuchten Slots mit Produktivitätskennzeichnung
+booked_slots AS (
+  SELECT
+    s.day_abbrev,
+    s.employee_id,
+    s.start_time,
+    s.end_time,
+    t.name as task_name,
+    COALESCE(t.productivity, false) as is_productive,
+    s.task_id -- Task ID beibehalten, um sie später zu verwenden
+  FROM schedule s
+  LEFT JOIN tasks t ON s.task_id = t.id
+  WHERE t.name IS NOT NULL
+    AND s.employee_id NOT IN (28, 33, 34, 32, 30)
+    AND s.version_id = {{SelectVersion.selectedOptionValue}}
+),
+
+-- Arbeitszeiten pro Mitarbeiter und Tag ermitteln
+working_hours AS (
+  SELECT
+    bs.day_abbrev,
+    bs.employee_id,
+    MIN(bs.start_time) as first_appointment,
+    MAX(bs.end_time) as last_appointment
+  FROM booked_slots bs
+  GROUP BY bs.day_abbrev, bs.employee_id
+),
+
+-- Alle Slots mit Buchungsstatus und Produktivität (originale Logik beibehalten)
+all_slots AS (
+  SELECT
+    tg.day_abbrev,
+    tg.employee_id,
+    tg.employee_name,
+    tg.slot_time,
+    tg.slot_end,
+    CASE
+      WHEN bs.task_name IS NOT NULL AND bs.is_productive = TRUE THEN 'PRODUKTIV_GEBUCHT'
+      WHEN bs.task_name IS NOT NULL AND bs.is_productive = FALSE THEN 'UNPRODUKTIV_GEBUCHT'
+      ELSE 'FREI'
+    END as slot_status,
+    bs.task_id, -- Task ID weiterhin hier verfügbar machen
+    -- Slot-Nummer für Gruppierung
+    ROW_NUMBER() OVER (
+      PARTITION BY tg.day_abbrev, tg.employee_id
+      ORDER BY tg.slot_time
+    ) as slot_number
+  FROM time_grid tg
+  INNER JOIN working_hours wh ON (
+    tg.day_abbrev = wh.day_abbrev AND
+    tg.employee_id = wh.employee_id AND
+    tg.slot_time >= wh.first_appointment AND
+    tg.slot_time < wh.last_appointment
+  )
+  LEFT JOIN booked_slots bs ON (
+    tg.day_abbrev = bs.day_abbrev AND
+    tg.employee_id = bs.employee_id AND
+    tg.slot_time >= bs.start_time AND
+    tg.slot_time < bs.end_time
+  )
+),
+
+-- Gap-Analyse: Aufeinanderfolgende freie Slots identifizieren
+gap_analysis AS (
+  SELECT
+    als.day_abbrev,
+    als.employee_id,
+    als.employee_name,
+    als.slot_time,
+    als.slot_status,
+    als.slot_number,
+    -- Gruppierung aufeinanderfolgender freier Slots
+    CASE
+      WHEN als.slot_status = 'FREI' THEN
+        als.slot_number - ROW_NUMBER() OVER (
+          PARTITION BY als.day_abbrev, als.employee_id, als.slot_status
+          ORDER BY als.slot_time
+        )
+    END as gap_group
+  FROM all_slots als
+),
+
+-- Freie Slot-Gruppen zusammenfassen und korrekt aufteilen
+free_slot_groups AS (
+  SELECT
+    ga.day_abbrev,
+    ga.employee_id,
+    ga.employee_name,
+    ga.gap_group,
+    COUNT(*) as consecutive_free_slots,
+    FLOOR(COUNT(*) / 2) as available_patient_slots_30min,
+    COUNT(*) % 2 as available_admin_slots_15min
+  FROM gap_analysis ga
+  WHERE ga.slot_status = 'FREI' AND ga.gap_group IS NOT NULL
+  GROUP BY ga.day_abbrev, ga.employee_id, ga.employee_name, ga.gap_group
+),
+
+-- Geplante Zeit-Statistiken
+planned_time_stats AS (
+  SELECT
+    als.employee_id,
+    als.employee_name,
+    als.day_abbrev,
+    COUNT(CASE WHEN als.slot_status = 'PRODUKTIV_GEBUCHT' THEN 1 END) as planned_productive_slots_15min,
+    COUNT(CASE WHEN als.slot_status = 'UNPRODUKTIV_GEBUCHT' AND als.task_id <> 7 THEN 1 END) as planned_unproductive_slots_15min
+  FROM all_slots als
+  WHERE als.slot_status IN ('PRODUKTIV_GEBUCHT', 'UNPRODUKTIV_GEBUCHT')
+  GROUP BY als.employee_id, als.employee_name, als.day_abbrev
+),
+
+-- Verfügbare Zeit-Statistiken
+available_time_stats AS (
+  SELECT
+    fsg.employee_id,
+    fsg.employee_name,
+    fsg.day_abbrev,
+    SUM(fsg.available_patient_slots_30min) as available_slots_30min,
+    SUM(fsg.available_admin_slots_15min) as available_slots_15min
+  FROM free_slot_groups fsg
+  GROUP BY fsg.employee_id, fsg.employee_name, fsg.day_abbrev
+),
+
+-- Kombinierte Statistiken pro Mitarbeiter und Tag
+daily_stats AS (
+  SELECT
+    COALESCE(pts.employee_id, ats.employee_id) as employee_id,
+    COALESCE(pts.employee_name, ats.employee_name) as employee_name,
+    COALESCE(pts.day_abbrev, ats.day_abbrev) as day_abbrev,
+
+    -- Verfügbare Zeit
+    COALESCE(ats.available_slots_30min, 0) as slots_30min,
+    COALESCE(ats.available_slots_15min, 0) as slots_15min,
+
+    -- Geplante Zeit
+    COALESCE(pts.planned_productive_slots_15min, 0) as planned_productive_slots_15min,
+    COALESCE(pts.planned_unproductive_slots_15min, 0) as planned_unproductive_slots_15min
+
+  FROM planned_time_stats pts
+  FULL OUTER JOIN available_time_stats ats ON (
+    pts.employee_id = ats.employee_id AND
+    pts.day_abbrev = ats.day_abbrev
+  )
+),
+
+-- Mitarbeiter-Farben definieren
+employee_colors AS (
+  SELECT
+    emp.employee_id,
+    emp.employee_name,
+    CASE ROW_NUMBER() OVER (ORDER BY emp.employee_name)
+      WHEN 1 THEN '#6366f1'   -- Indigo
+      WHEN 2 THEN '#8b5cf6'   -- Violett
+      WHEN 3 THEN '#06b6d4'   -- Cyan
+      WHEN 4 THEN '#10b981'   -- Emerald
+      WHEN 5 THEN '#f59e0b'   -- Amber
+      WHEN 6 THEN '#ef4444'   -- Rose
+      WHEN 7 THEN '#84cc16'   -- Lime
+      WHEN 8 THEN '#ec4899'   -- Pink
+      WHEN 9 THEN '#3b82f6'   -- Blue
+      WHEN 10 THEN '#a855f7'  -- Purple
+      WHEN 11 THEN '#0ea5e9'  -- Sky
+      WHEN 12 THEN '#22c55e'  -- Green
+      WHEN 13 THEN '#eab308'  -- Yellow
+      WHEN 14 THEN '#f97316'  -- Orange
+      WHEN 15 THEN '#14b8a6'  -- Teal
+      WHEN 16 THEN '#f43f5e'  -- Rose-Red
+      WHEN 17 THEN '#8b5a3c'  -- Brown
+      WHEN 18 THEN '#6b7280'  -- Gray
+      WHEN 19 THEN '#dc2626'  -- Red
+      WHEN 20 THEN '#7c3aed'  -- Violet
+      WHEN 21 THEN '#059669'  -- Emerald-Dark
+      WHEN 22 THEN '#d97706'  -- Amber-Dark
+      WHEN 23 THEN '#be123c'  -- Rose-Dark
+      WHEN 24 THEN '#4c1d95'  -- Indigo-Dark
+      WHEN 25 THEN '#065f46'  -- Green-Dark
+      WHEN 26 THEN '#92400e'  -- Orange-Dark
+      WHEN 27 THEN '#7e22ce'  -- Purple-Dark
+      WHEN 28 THEN '#0c4a6e'  -- Sky-Dark
+      WHEN 29 THEN '#991b1b'  -- Red-Dark
+      WHEN 30 THEN '#581c87'  -- Violet-Dark
+      WHEN 31 THEN '#155e75'  -- Cyan-Dark
+      WHEN 32 THEN '#166534'  -- Green-Dark
+      WHEN 33 THEN '#a16207'  -- Yellow-Dark
+      WHEN 34 THEN '#ea580c'  -- Orange-Bright
+      WHEN 35 THEN '#0d9488'  -- Teal-Dark
+      WHEN 36 THEN '#e11d48'  -- Rose-Bright
+      WHEN 37 THEN '#7c2d12'  -- Brown-Dark
+      WHEN 38 THEN '#374151'  -- Gray-Dark
+      WHEN 39 THEN '#1e40af'  -- Blue-Dark
+      WHEN 40 THEN '#9333ea'  -- Purple-Bright
+      ELSE '#' || LPAD(TO_HEX((ROW_NUMBER() OVER (ORDER BY emp.employee_name) * 123456) % 16777215), 6, '0')
+    END as bg_color,
+    '#ffffff' as text_color
+  FROM (SELECT DISTINCT ds.employee_id, ds.employee_name FROM daily_stats ds) emp
+),
+-- PIVOT-TABELLE: Kombinierte Auswertung
+cte_erg AS (
+SELECT
+  emp.employee_name as "Mitarbeiter",
+  ec.bg_color as "Mitarbeiter_Color",
+  ec.text_color as "Mitarbeiter_TextColor",
+
+  -- Montag: Verfügbar + Geplant
+  COALESCE(mo.slots_30min, 0) || ' / ' || COALESCE(mo.slots_15min, 0) ||
+  ' (G:' || COALESCE(mo.planned_productive_slots_15min, 0) || '/' || COALESCE(mo.planned_unproductive_slots_15min, 0) || ')' as "Montag_30min/15min",
+
+  -- Dienstag
+  COALESCE(di.slots_30min, 0) || ' / ' || COALESCE(di.slots_15min, 0) ||
+  ' (G:' || COALESCE(di.planned_productive_slots_15min, 0) || '/' || COALESCE(di.planned_unproductive_slots_15min, 0) || ')' as "Dienstag_30min/15min",
+
+  -- Mittwoch
+  COALESCE(mi.slots_30min, 0) || ' / ' || COALESCE(mi.slots_15min, 0) ||
+  ' (G:' || COALESCE(mi.planned_productive_slots_15min, 0) || '/' || COALESCE(mi.planned_unproductive_slots_15min, 0) || ')' as "Mittwoch_30min/15min",
+
+  -- Donnerstag
+  COALESCE(donnerstag.slots_30min, 0) || ' / ' || COALESCE(donnerstag.slots_15min, 0) ||
+  ' (G:' || COALESCE(donnerstag.planned_productive_slots_15min, 0) || '/' || COALESCE(donnerstag.planned_unproductive_slots_15min, 0) || ')' as "Donnerstag_30min/15min",
+
+  -- Freitag
+  COALESCE(fr.slots_30min, 0) || ' / ' || COALESCE(fr.slots_15min, 0) ||
+  ' (G:' || COALESCE(fr.planned_productive_slots_15min, 0) || '/' || COALESCE(fr.planned_unproductive_slots_15min, 0) || ')' as "Freitag_30min/15min",
+
+  -- VERFÜGBARE Wochensummen
+  COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+  COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0) as "Verfügbar_30min_Slots",
+
+  COALESCE(mo.slots_15min, 0) + COALESCE(di.slots_15min, 0) + COALESCE(mi.slots_15min, 0) +
+  COALESCE(donnerstag.slots_15min, 0) + COALESCE(fr.slots_15min, 0) as "Verfügbar_15min_Slots",
+
+  -- GEPLANTE Wochensummen
+  COALESCE(mo.planned_productive_slots_15min, 0) + COALESCE(di.planned_productive_slots_15min, 0) +
+  COALESCE(mi.planned_productive_slots_15min, 0) + COALESCE(donnerstag.planned_productive_slots_15min, 0) +
+  COALESCE(fr.planned_productive_slots_15min, 0) as "Geplant_Produktiv_15min",
+
+  COALESCE(mo.planned_unproductive_slots_15min, 0) + COALESCE(di.planned_unproductive_slots_15min, 0) +
+  COALESCE(mi.planned_unproductive_slots_15min, 0) + COALESCE(donnerstag.planned_unproductive_slots_15min, 0) +
+  COALESCE(fr.planned_unproductive_slots_15min, 0) as "Geplant_Unproduktiv_15min",
+
+  -- GESAMTSUMMEN
+  -- Gesamte produktive Zeit (30min verfügbar * 2 + geplante produktive 15min Slots)
+  (COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+   COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0)) * 2 +
+  (COALESCE(mo.planned_productive_slots_15min, 0) + COALESCE(di.planned_productive_slots_15min, 0) +
+   COALESCE(mi.planned_productive_slots_15min, 0) + COALESCE(donnerstag.planned_productive_slots_15min, 0) +
+   COALESCE(fr.planned_productive_slots_15min, 0)) as "Gesamt_Produktiv_15min",
+
+  -- Gesamte unproduktive Zeit (15min verfügbar + geplante unproduktive 15min Slots)
+  (COALESCE(mo.slots_15min, 0) + COALESCE(di.slots_15min, 0) + COALESCE(mi.slots_15min, 0) +
+   COALESCE(donnerstag.slots_15min, 0) + COALESCE(fr.slots_15min, 0)) +
+  (COALESCE(mo.planned_unproductive_slots_15min, 0) + COALESCE(di.planned_unproductive_slots_15min, 0) +
+   COALESCE(mi.planned_unproductive_slots_15min, 0) + COALESCE(donnerstag.planned_unproductive_slots_15min, 0) +
+   COALESCE(fr.planned_unproductive_slots_15min, 0)) as "Gesamt_Unproduktiv_15min",
+
+  -- Mögliche Patiententermine (nur verfügbare 30min Slots)
+  COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+  COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0) as "Mögliche_Patiententermine",
+
+  -- Sortierungshilfe
+  0 as sort_order
+
+FROM (SELECT DISTINCT ds.employee_id, ds.employee_name FROM daily_stats ds) emp
+LEFT JOIN employee_colors ec ON emp.employee_id = ec.employee_id
+
+-- LEFT JOINs für jeden Wochentag
+LEFT JOIN daily_stats mo ON emp.employee_id = mo.employee_id AND mo.day_abbrev = 'Mo'
+LEFT JOIN daily_stats di ON emp.employee_id = di.employee_id AND di.day_abbrev = 'Di'
+LEFT JOIN daily_stats mi ON emp.employee_id = mi.employee_id AND mi.day_abbrev = 'Mi'
+LEFT JOIN daily_stats donnerstag ON emp.employee_id = donnerstag.employee_id AND donnerstag.day_abbrev = 'Do'
+LEFT JOIN daily_stats fr ON emp.employee_id = fr.employee_id AND fr.day_abbrev = 'Fr'
+
+UNION ALL
+
+-- SUMMENZEILE
+SELECT
+  '📊 GESAMT' as "Mitarbeiter",
+  '#4CAF50' as "Mitarbeiter_Color",
+  '#FFFFFF' as "Mitarbeiter_TextColor",
+
+  -- Montag Summen
+  SUM(COALESCE(mo.slots_30min, 0)) || ' / ' || SUM(COALESCE(mo.slots_15min, 0)) ||
+  ' (G:' || SUM(COALESCE(mo.planned_productive_slots_15min, 0)) || '/' || SUM(COALESCE(mo.planned_unproductive_slots_15min, 0)) || ')' as "Montag_30min/15min",
+
+  -- Dienstag Summen
+  SUM(COALESCE(di.slots_30min, 0)) || ' / ' || SUM(COALESCE(di.slots_15min, 0)) ||
+  ' (G:' || SUM(COALESCE(di.planned_productive_slots_15min, 0)) || '/' || SUM(COALESCE(di.planned_unproductive_slots_15min, 0)) || ')' as "Dienstag_30min/15min",
+
+  -- Mittwoch Summen
+  SUM(COALESCE(mi.slots_30min, 0)) || ' / ' || SUM(COALESCE(mi.slots_15min, 0)) ||
+  ' (G:' || SUM(COALESCE(mi.planned_productive_slots_15min, 0)) || '/' || SUM(COALESCE(mi.planned_unproductive_slots_15min, 0)) || ')' as "Mittwoch_30min/15min",
+
+  -- Donnerstag Summen
+  SUM(COALESCE(donnerstag.slots_30min, 0)) || ' / ' || SUM(COALESCE(donnerstag.slots_15min, 0)) ||
+  ' (G:' || SUM(COALESCE(donnerstag.planned_productive_slots_15min, 0)) || '/' || SUM(COALESCE(donnerstag.planned_unproductive_slots_15min, 0)) || ')' as "Donnerstag_30min/15min",
+
+  -- Freitag Summen
+  SUM(COALESCE(fr.slots_30min, 0)) || ' / ' || SUM(COALESCE(fr.slots_15min, 0)) ||
+  ' (G:' || SUM(COALESCE(fr.planned_productive_slots_15min, 0)) || '/' || SUM(COALESCE(fr.planned_unproductive_slots_15min, 0)) || ')' as "Freitag_30min/15min",
+
+  -- VERFÜGBARE Wochensummen
+  SUM(COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+      COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0)) as "Verfügbar_30min_Slots",
+
+  SUM(COALESCE(mo.slots_15min, 0) + COALESCE(di.slots_15min, 0) + COALESCE(mi.slots_15min, 0) +
+      COALESCE(donnerstag.slots_15min, 0) + COALESCE(fr.slots_15min, 0)) as "Verfügbar_15min_Slots",
+
+  -- GEPLANTE Wochensummen
+  SUM(COALESCE(mo.planned_productive_slots_15min, 0) + COALESCE(di.planned_productive_slots_15min, 0) +
+      COALESCE(mi.planned_productive_slots_15min, 0) + COALESCE(donnerstag.planned_productive_slots_15min, 0) +
+      COALESCE(fr.planned_productive_slots_15min, 0)) as "Geplant_Produktiv_15min",
+
+  SUM(COALESCE(mo.planned_unproductive_slots_15min, 0) + COALESCE(di.planned_unproductive_slots_15min, 0) +
+      COALESCE(mi.planned_unproductive_slots_15min, 0) + COALESCE(donnerstag.planned_unproductive_slots_15min, 0) +
+      COALESCE(fr.planned_unproductive_slots_15min, 0)) as "Geplant_Unproduktiv_15min",
+
+  -- GESAMTSUMMEN
+  SUM((COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+        COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0)) * 2 +
+       (COALESCE(mo.planned_productive_slots_15min, 0) + COALESCE(di.planned_productive_slots_15min, 0) +
+        COALESCE(mi.planned_productive_slots_15min, 0) + COALESCE(donnerstag.planned_productive_slots_15min, 0) +
+        COALESCE(fr.planned_productive_slots_15min, 0))) as "Gesamt_Produktiv_15min",
+
+  SUM((COALESCE(mo.slots_15min, 0) + COALESCE(di.slots_15min, 0) + COALESCE(mi.slots_15min, 0) +
+        COALESCE(donnerstag.slots_15min, 0) + COALESCE(fr.slots_15min, 0)) +
+       (COALESCE(mo.planned_unproductive_slots_15min, 0) + COALESCE(di.planned_unproductive_slots_15min, 0) +
+        COALESCE(mi.planned_unproductive_slots_15min, 0) + COALESCE(donnerstag.planned_unproductive_slots_15min, 0) +
+        COALESCE(fr.planned_unproductive_slots_15min, 0))) as "Gesamt_Unproduktiv_15min",
+
+  -- Verfügbare Patiententermine gesamt
+  SUM(COALESCE(mo.slots_30min, 0) + COALESCE(di.slots_30min, 0) + COALESCE(mi.slots_30min, 0) +
+      COALESCE(donnerstag.slots_30min, 0) + COALESCE(fr.slots_30min, 0)) as "Mögliche_Patiententermine",
+
+  -- Sortierungshilfe
+  1 as sort_order
+
+FROM (SELECT DISTINCT ds.employee_id, ds.employee_name FROM daily_stats ds) emp
+LEFT JOIN daily_stats mo ON emp.employee_id = mo.employee_id AND mo.day_abbrev = 'Mo'
+LEFT JOIN daily_stats di ON emp.employee_id = di.employee_id AND di.day_abbrev = 'Di'
+LEFT JOIN daily_stats mi ON emp.employee_id = mi.employee_id AND mi.day_abbrev = 'Mi'
+LEFT JOIN daily_stats donnerstag ON emp.employee_id = donnerstag.employee_id AND donnerstag.day_abbrev = 'Do'
+LEFT JOIN daily_stats fr ON emp.employee_id = fr.employee_id AND fr.day_abbrev = 'Fr'
+
+ORDER BY sort_order DESC, "Mitarbeiter"
+)
+SELECT
+    e.*,
+    (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min") AS "Gesamt_Slots_Insgesamt",
+    CASE
+        WHEN (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min") > 0 THEN
+            ROUND(((e."Gesamt_Produktiv_15min"::numeric * 100) / (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min"))::numeric, 2)
+        ELSE 0.00
+    END AS "Anteil_Produktiv_Num",
+    CASE
+        WHEN (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min") > 0 THEN
+            ROUND(((e."Gesamt_Unproduktiv_15min"::numeric * 100) / (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min"))::numeric, 2)
+        ELSE 0.00
+    END AS "Anteil_Unproduktiv_Num",
+    CASE
+        WHEN (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min") > 0 THEN
+            (ROUND(((e."Gesamt_Produktiv_15min"::numeric * 100) / (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min"))::numeric, 2))::text || '%'
+        ELSE '0.00%'
+    END AS "Anteil_Produktiv_Prozent",
+    CASE
+        WHEN (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min") > 0 THEN
+            (ROUND(((e."Gesamt_Unproduktiv_15min"::numeric * 100) / (e."Gesamt_Produktiv_15min" + e."Gesamt_Unproduktiv_15min"))::numeric, 2))::text || '%'
+        ELSE '0.00%'
+    END AS "Anteil_Unproduktiv_Prozent"
+FROM cte_erg e;

@@ -1,0 +1,22 @@
+SELECT t.*,
+CASE 
+      WHEN t.color IS NULL THEN '#2D3748'
+      WHEN LENGTH(t.color) != 7 OR SUBSTRING(t.color, 1, 1) != '#' THEN '#2D3748'
+      ELSE
+        CASE 
+          -- Helligkeit der Hintergrundfarbe berechnen (Luminance-Formel)
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 180 THEN '#1A202C'  -- Sehr dunkler Text für sehr helle Farben
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 140 THEN '#2D3748'  -- Dunkler Text für helle Farben
+          -- Für mittlere Farben (wie Violett) → Weißer Text für besseren Kontrast
+          ELSE '#FFFFFF'  -- Weißer Text für dunkle und mittlere Farben
+        END
+    END as text_color
+	FROM public.tasks t order by name

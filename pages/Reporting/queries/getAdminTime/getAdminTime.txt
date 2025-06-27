@@ -1,0 +1,57 @@
+/*
+ * Dieses Skript berechnet die Gesamtzeit (in Minuten), die jeder Mitarbeiter
+ * für administrative Aufgaben aufwendet, gruppiert nach Wochentag.
+ *
+ * Eine "administrative Aufgabe" ist dabei eine Aufgabe aus der 'tasks'-Tabelle,
+ * deren Name das Wort 'Admin' enthält (Groß- und Kleinschreibung wird ignoriert).
+ *
+ * Die Logik ist wie folgt aufgebaut:
+ * 1. Die Tabellen `schedule`, `employees` und `tasks` werden miteinander verknüpft.
+ * 2. Die Einträge werden so gefiltert, dass nur Aufgaben mit 'Admin' im Namen
+ * berücksichtigt werden.
+ * 3. Für jeden dieser Einträge wird die Dauer (end_time - start_time) berechnet.
+ * 4. Das Ergebnis wird nach Mitarbeiter und Wochentag gruppiert und die Dauer
+ * aufsummiert, um die Gesamtzeit in Minuten zu erhalten.
+ */
+SELECT
+    e.name AS employee_name,
+    -- Wandelt das Kürzel in einen deutschen Wochentagsnamen um.
+    CASE s.day_abbrev
+        WHEN 'MO' THEN 'Montag'
+        WHEN 'DI' THEN 'Dienstag'
+        WHEN 'MI' THEN 'Mittwoch'
+        WHEN 'DO' THEN 'Donnerstag'
+        WHEN 'FR' THEN 'Freitag'
+        WHEN 'SA' THEN 'Samstag'
+        WHEN 'SO' THEN 'Sonntag'
+        ELSE s.day_abbrev
+    END AS weekday,
+    -- Berechnet die Gesamtdauer in Minuten.
+    -- EXTRACT(EPOCH FROM ...) holt die Dauer in Sekunden, die dann durch 60 geteilt wird.
+    SUM(EXTRACT(EPOCH FROM (s.end_time - s.start_time))) / 60 AS total_admin_minutes
+FROM
+    public.schedule s
+    -- Verbinde mit der Mitarbeiter-Tabelle für den Namen.
+    INNER JOIN public.employees e ON s.employee_id = e.id
+    -- Verbinde mit der Aufgaben-Tabelle für den Aufgabennamen.
+    INNER JOIN public.tasks t ON s.task_id = t.id
+WHERE
+    -- Filtert nach Aufgaben, deren Name 'Admin' enthält (ILIKE ignoriert Groß-/Kleinschreibung).
+    t.name ILIKE '%Admin%'
+    AND s.employee_id IS NOT NULL -- Stellt sicher, dass die Aufgabe einem Mitarbeiter zugeordnet ist.
+		AND day_abbrev = {{SelectDay.selectedOptionValue}}
+GROUP BY
+    e.name,
+    s.day_abbrev
+ORDER BY
+    employee_name,
+    -- Sortiere nach der korrekten Reihenfolge der Wochentage.
+    CASE s.day_abbrev
+        WHEN 'MO' THEN 1
+        WHEN 'DI' THEN 2
+        WHEN 'MI' THEN 3
+        WHEN 'DO' THEN 4
+        WHEN 'FR' THEN 5
+        WHEN 'SA' THEN 6
+        WHEN 'SO' THEN 7
+    END;

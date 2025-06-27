@@ -1,0 +1,2 @@
+DELETE FROM public."schedule"
+  WHERE version_id= {{SelectVersionDelete.selectedOptionValue}}

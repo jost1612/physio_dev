@@ -1,0 +1,4 @@
+SELECT copy_schedule_data_between_versions(
+    {{ SelectOldVersion.selectedOptionValue }},
+    {{ SelectNewVersion.selectedOptionValue }}
+);

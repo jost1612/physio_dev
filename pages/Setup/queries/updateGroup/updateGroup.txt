@@ -1,0 +1,3 @@
+UPDATE public."groups" SET
+    "name" = '{{TableGroups.updatedRow.name}}'
+  WHERE id={{TableGroups.updatedRow.id}}

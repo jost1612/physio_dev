@@ -1,0 +1,2 @@
+INSERT INTO public."groups" ("name")
+  VALUES ('{{TableGroups.newRow.name}}');

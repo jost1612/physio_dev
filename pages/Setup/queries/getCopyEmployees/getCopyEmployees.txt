@@ -1,0 +1,1 @@
+SELECT * FROM public."employees" where id <> {{SelectOldEmployee.selectedOptionValue}} ORDER BY name

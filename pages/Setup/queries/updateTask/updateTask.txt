@@ -1,0 +1,6 @@
+UPDATE public."tasks" SET
+    "name" = '{{TableTask.updatedRow.name}}',
+    "duration_minutes" = {{TableTask.updatedRow.duration_minutes}},
+		"group_id" = {{TableTask.updatedRow.group_id }},
+		"productivity" = {{TableTask.updatedRow.productivity}} 
+  WHERE id = {{TableTask.updatedRow.id}}

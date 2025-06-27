@@ -1,0 +1,35 @@
+{
+  "gitSyncId": "685e483118280a5cf36d2a8a_22b49d89-6ecb-4725-ae67-300cb1963db4",
+  "id": "Excel Export Mitarbeiter_getTasksForEmployeeExport",
+  "pluginId": "postgres-plugin",
+  "pluginType": "DB",
+  "unpublishedAction": {
+    "actionConfiguration": {
+      "body": "WITH timeslots AS (\n  -- 15-Minuten Timeslots ab 07:00 (erweitert!)\n  SELECT time_slot, to_char(time_slot, 'HH24:MI') as time_display\n  FROM (VALUES \n    -- 07:00 Stunde\n    ('07:00'::time), ('07:15'::time), ('07:30'::time), ('07:45'::time),\n    -- 08:00 Stunde\n    ('08:00'::time), ('08:15'::time), ('08:30'::time), ('08:45'::time),\n    -- 09:00 Stunde\n    ('09:00'::time), ('09:15'::time), ('09:30'::time), ('09:45'::time),\n    -- 10:00 Stunde\n    ('10:00'::time), ('10:15'::time), ('10:30'::time), ('10:45'::time),\n    -- 11:00 Stunde\n    ('11:00'::time), ('11:15'::time), ('11:30'::time), ('11:45'::time),\n    -- 12:00 Stunde\n    ('12:00'::time), ('12:15'::time), ('12:30'::time), ('12:45'::time),\n    -- 13:00 Stunde\n    ('13:00'::time), ('13:15'::time), ('13:30'::time), ('13:45'::time),\n    -- 14:00 Stunde\n    ('14:00'::time), ('14:15'::time), ('14:30'::time), ('14:45'::time),\n    -- 15:00 Stunde\n    ('15:00'::time), ('15:15'::time), ('15:30'::time), ('15:45'::time),\n    -- 16:00 Stunde\n    ('16:00'::time), ('16:15'::time), ('16:30'::time), ('16:45'::time),\n    -- 17:00 Stunde\n    ('17:00'::time), ('17:15'::time), ('17:30'::time), ('17:45'::time),\n    -- 18:00 Stunde\n    ('18:00'::time), ('18:15'::time), ('18:30'::time), ('18:45'::time),\n\t\t-- 19:00 Stunde\n    ('19:00'::time), ('19:15'::time), ('19:30'::time), ('19:45'::time)\n  ) AS t(time_slot)\n),\n\nschedule_with_tasks AS (\n  -- Schedule mit Task-Daten, Farben und EMPLOYEE FILTER\n  SELECT \n    s.day_abbrev,\n    s.start_time,\n    s.end_time,\n    s.task_id,\n    s.employee_id,\n    t.name as task_name,\n    t.color as task_color,\n    e.name as employee_name,\n    s.room_id,\n    r.name as room_name,\n    -- Textfarbe berechnen\n    CASE \n      WHEN t.color IS NULL THEN '#000000'\n      WHEN (\n        (('x' || substring(t.color, 2, 2))::bit(8)::INTEGER * 299) +\n        (('x' || substring(t.color, 4, 2))::bit(8)::INTEGER * 587) +\n        (('x' || substring(t.color, 6, 2))::bit(8)::INTEGER * 114)\n      ) / 1000 > 128 \n      THEN '#000000' \n      ELSE '#FFFFFF' \n    END as text_color\n  FROM schedule s\n  LEFT JOIN tasks t ON s.task_id = t.id\n  LEFT JOIN employees e ON s.employee_id = e.id\n  LEFT JOIN rooms r ON s.room_id = r.id\n\tLEFT JOIN planning_versions p ON p.id = s.version_id\n  -- WICHTIGE ÄNDERUNG: Parameter statt feste SelectBox\n  WHERE s.employee_id = {{this.params.employeeId}}\n\tAND p.is_active = true\n),\n\nslot_assignments AS (\n  -- Timeslots mit gefilterten Tasks verknüpfen\n  SELECT \n    ts.time_slot,\n    ts.time_display,\n    days.day_abbrev as day_abbrev,\n    swt.task_name,\n    swt.task_color,\n    swt.text_color,\n    swt.employee_name,\n    swt.employee_id,\n    swt.room_name\n  FROM timeslots ts\n  CROSS JOIN (\n    VALUES ('Mo'), ('Di'), ('Mi'), ('Do'), ('Fr')\n  ) AS days(day_abbrev)\n  LEFT JOIN schedule_with_tasks swt ON \n    swt.day_abbrev = days.day_abbrev\n    AND ts.time_slot >= swt.start_time \n    AND ts.time_slot < swt.end_time\n)\n\n-- FINAL MATRIX - TASK-NAMEN IN ZELLEN\nSELECT \n  time_display as \"Zeit\",\n  \n  -- Montag (Mo)\n  MAX(CASE WHEN day_abbrev = 'Mo' THEN \n    COALESCE(task_name, '') \n  END) as \"Mo\",\n  MAX(CASE WHEN day_abbrev = 'Mo' THEN \n    COALESCE(task_color, '#F8F9FA') \n  END) as \"Mo_Color\",\n  MAX(CASE WHEN day_abbrev = 'Mo' THEN \n    COALESCE(text_color, '#000000') \n  END) as \"Mo_TextColor\",\n  \n  -- Dienstag (Di)\n  MAX(CASE WHEN day_abbrev = 'Di' THEN \n    COALESCE(task_name, '') \n  END) as \"Di\",\n  MAX(CASE WHEN day_abbrev = 'Di' THEN \n    COALESCE(task_color, '#F8F9FA') \n  END) as \"Di_Color\",\n  MAX(CASE WHEN day_abbrev = 'Di' THEN \n    COALESCE(text_color, '#000000') \n  END) as \"Di_TextColor\",\n  \n  -- Mittwoch (Mi)\n  MAX(CASE WHEN day_abbrev = 'Mi' THEN \n    COALESCE(task_name, '') \n  END) as \"Mi\",\n  MAX(CASE WHEN day_abbrev = 'Mi' THEN \n    COALESCE(task_color, '#F8F9FA') \n  END) as \"Mi_Color\", \n  MAX(CASE WHEN day_abbrev = 'Mi' THEN \n    COALESCE(text_color, '#000000') \n  END) as \"Mi_TextColor\",\n  \n  -- Donnerstag (Do)\n  MAX(CASE WHEN day_abbrev = 'Do' THEN \n    COALESCE(task_name, '') \n  END) as \"Do\",\n  MAX(CASE WHEN day_abbrev = 'Do' THEN \n    COALESCE(task_color, '#F8F9FA') \n  END) as \"Do_Color\",\n  MAX(CASE WHEN day_abbrev = 'Do' THEN \n    COALESCE(text_color, '#000000') \n  END) as \"Do_TextColor\",\n  \n  -- Freitag (Fr)\n  MAX(CASE WHEN day_abbrev = 'Fr' THEN \n    COALESCE(task_name, '') \n  END) as \"Fr\", \n  MAX(CASE WHEN day_abbrev = 'Fr' THEN \n    COALESCE(task_color, '#F8F9FA') \n  END) as \"Fr_Color\",\n  MAX(CASE WHEN day_abbrev = 'Fr' THEN \n    COALESCE(text_color, '#000000') \n  END) as \"Fr_TextColor\"\n\nFROM slot_assignments\nGROUP BY time_slot, time_display\nORDER BY time_slot;",
+      "encodeParamsToggle": true,
+      "paginationType": "NONE",
+      "pluginSpecifiedTemplates": [
+        {
+          "value": true
+        }
+      ],
+      "timeoutInMillisecond": 10000
+    },
+    "confirmBeforeExecute": false,
+    "datasource": {
+      "id": "PhysioPlanung_DEV",
+      "isAutoGenerated": false,
+      "name": "PhysioPlanung_DEV",
+      "pluginId": "postgres-plugin"
+    },
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "getTasksForEmployeeExport",
+    "pageId": "Excel Export Mitarbeiter",
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": false
+  }
+}

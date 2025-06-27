@@ -1,0 +1,18 @@
+SELECT 
+  s.id as schedule_id,
+  s.room_id,
+  s.employee_id,
+  s.task_id,
+  s.day_abbrev,
+  s.start_time,
+  s.end_time,
+  s.created_from,
+  t.name as task_name,
+  t.duration_minutes,
+  e.name as employee_name
+FROM public.schedule s
+LEFT JOIN public.tasks t ON s.task_id = t.id  
+LEFT JOIN public.employees e ON s.employee_id = e.id
+WHERE s.employee_id = {{selectEmployee.selectedOptionValue}}
+  AND s.day_abbrev IN ('Mo', 'Di', 'Mi', 'Do', 'Fr')
+ORDER BY s.day_abbrev, s.start_time;

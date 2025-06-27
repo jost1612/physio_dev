@@ -1,0 +1,150 @@
+-- DYNAMISCHES PIVOT mit generischen Pastellfarben
+WITH employee_colors AS (
+  SELECT 
+    e.id as employee_id,
+    e.name as employee_name,
+    
+    -- 🎨 DYNAMISCHE HINTERGRUNDFARBE basierend auf Mitarbeiter-ID/Name
+    '#' ||
+    -- Rot-Komponente (Pastellbereich 230-250)
+    LPAD(UPPER(TO_HEX((230 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT), 1, 8))::bit(32)::BIGINT) % 20))::INTEGER)), 2, '0') ||
+    -- Grün-Komponente (Pastellbereich 235-250) 
+    LPAD(UPPER(TO_HEX((235 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT || 'G'), 1, 8))::bit(32)::BIGINT) % 15))::INTEGER)), 2, '0') ||
+    -- Blau-Komponente (Pastellbereich 240-255)
+    LPAD(UPPER(TO_HEX((240 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT || 'B'), 1, 8))::bit(32)::BIGINT) % 15))::INTEGER)), 2, '0')
+    as bg_color,
+    
+    -- 🎨 ALTERNATIVE: Vordefinierte Palette mit Modulo-Wraparound
+    CASE (ROW_NUMBER() OVER (ORDER BY e.name) - 1) % 30
+      WHEN 0 THEN '#E0E7FF'   -- Lavendel
+      WHEN 1 THEN '#FCE7F3'   -- Rosa Pastell
+      WHEN 2 THEN '#ECFDF5'   -- Mint Pastell  
+      WHEN 3 THEN '#FEF3C7'   -- Gelb Pastell
+      WHEN 4 THEN '#DBEAFE'   -- Himmelblau Pastell
+      WHEN 5 THEN '#F3E8FF'   -- Lila Pastell
+      WHEN 6 THEN '#DCFCE7'   -- Grün Pastell
+      WHEN 7 THEN '#FED7AA'   -- Pfirsich Pastell
+      WHEN 8 THEN '#E0F2FE'   -- Cyan Pastell
+      WHEN 9 THEN '#FDF2F8'   -- Rosé Pastell
+      WHEN 10 THEN '#F0FDF4'  -- Limette Pastell
+      WHEN 11 THEN '#FFFBEB'  -- Creme Pastell
+      WHEN 12 THEN '#EDE9FE'  -- Violett Pastell
+      WHEN 13 THEN '#ECFCCB'  -- Hellgrün Pastell
+      WHEN 14 THEN '#FEF7CD'  -- Zitrone Pastell
+      WHEN 15 THEN '#F1F5F9'  -- Grau Pastell
+      WHEN 16 THEN '#FFEAA7'  -- Honig Pastell
+      WHEN 17 THEN '#DDD6FE'  -- Indigo Pastell
+      WHEN 18 THEN '#A7F3D0'  -- Smaragd Pastell
+      WHEN 19 THEN '#FBCFE8'  -- Magenta Pastell
+      -- Erweiterte Palette (20-29)
+      WHEN 20 THEN '#FFF2CD'  -- Champagne
+      WHEN 21 THEN '#E8F5E8'  -- Seafoam
+      WHEN 22 THEN '#FFE4E1'  -- Misty Rose
+      WHEN 23 THEN '#F0F8FF'  -- Alice Blue
+      WHEN 24 THEN '#F5F5DC'  -- Beige
+      WHEN 25 THEN '#E6E6FA'  -- Lavender
+      WHEN 26 THEN '#FFF8DC'  -- Cornsilk
+      WHEN 27 THEN '#F0FFFF'  -- Azure
+      WHEN 28 THEN '#FDF5E6'  -- Old Lace
+      WHEN 29 THEN '#F5FFFA'  -- Mint Cream
+      ELSE '#F8FAFC'  -- Fallback
+    END as palette_color,
+    
+    -- ✅ INTELLIGENTE TEXTFARBE basierend auf generierter Hintergrundfarbe
+    CASE 
+      -- Für dynamisch generierte Farben (immer Pastellbereich) → dunkler Text
+      WHEN (
+        -- Luminance der generierten Farbe berechnen
+        ((230 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT), 1, 8))::bit(32)::BIGINT) % 20)) * 299) +
+        ((235 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT || 'G'), 1, 8))::bit(32)::BIGINT) % 15)) * 587) +
+        ((240 + (ABS(('x' || SUBSTRING(MD5(e.name || e.id::TEXT || 'B'), 1, 8))::bit(32)::BIGINT) % 15)) * 114)
+      ) / 1000 > 200 THEN '#1A202C'
+      ELSE '#2D3748'
+    END as dynamic_text_color,
+    
+    -- 🎯 VORDEFINIERTE TEXTFARBEN für Palette (für besseren Kontrast)
+    CASE (ROW_NUMBER() OVER (ORDER BY e.name) - 1) % 30
+      WHEN 0 THEN '#3730A3'   -- Dunkles Indigo
+      WHEN 1 THEN '#BE185D'   -- Dunkles Rosa
+      WHEN 2 THEN '#065F46'   -- Dunkles Grün
+      WHEN 3 THEN '#92400E'   -- Dunkles Gelb
+      WHEN 4 THEN '#1E3A8A'   -- Dunkles Blau
+      WHEN 5 THEN '#581C87'   -- Dunkles Lila
+      WHEN 6 THEN '#166534'   -- Dunkles Grün
+      WHEN 7 THEN '#C2410C'   -- Dunkles Orange
+      WHEN 8 THEN '#164E63'   -- Dunkles Cyan
+      WHEN 9 THEN '#BE123C'   -- Dunkles Rosé
+      WHEN 10 THEN '#365314'  -- Dunkles Lime
+      WHEN 11 THEN '#A16207'  -- Dunkles Creme
+      WHEN 12 THEN '#4C1D95'  -- Dunkles Violett
+      WHEN 13 THEN '#365314'  -- Dunkles Hellgrün
+      WHEN 14 THEN '#A16207'  -- Dunkles Zitrone
+      WHEN 15 THEN '#475569'  -- Dunkles Grau
+      WHEN 16 THEN '#92400E'  -- Dunkles Honig
+      WHEN 17 THEN '#3730A3'  -- Dunkles Indigo
+      WHEN 18 THEN '#065F46'  -- Dunkles Smaragd
+      WHEN 19 THEN '#BE185D'  -- Dunkles Magenta
+      -- Erweiterte Textfarben (20-29)
+      WHEN 20 THEN '#7C2D12'  -- Dunkles Braun
+      WHEN 21 THEN '#14532D'  -- Dunkles Grün
+      WHEN 22 THEN '#991B1B'  -- Dunkles Rot
+      WHEN 23 THEN '#1E40AF'  -- Dunkles Blau
+      WHEN 24 THEN '#78350F'  -- Dunkles Beige
+      WHEN 25 THEN '#5B21B6'  -- Dunkles Lila
+      WHEN 26 THEN '#A16207'  -- Dunkles Gold
+      WHEN 27 THEN '#0F766E'  -- Dunkles Teal
+      WHEN 28 THEN '#9A3412'  -- Dunkles Orange
+      WHEN 29 THEN '#166534'  -- Dunkles Mint
+      ELSE '#374151'  -- Fallback
+    END as palette_text_color
+
+  FROM public.employees e
+)
+
+SELECT
+    e.name as "Mitarbeiter",
+    
+    -- 🎨 FARBOPTIONEN (wähle eine aus):
+    ec.palette_color as "Mitarbeiter_Color",           -- Vordefinierte 30-Farben-Palette
+    -- ec.bg_color as "Mitarbeiter_Color",             -- Dynamisch generierte Farben
+    
+    ec.palette_text_color as "Mitarbeiter_TextColor",  -- Passende Textfarbe für Palette
+    -- ec.dynamic_text_color as "Mitarbeiter_TextColor", -- Textfarbe für dynamische Farben
+    
+    -- Alternative Farben zum Testen
+    ec.bg_color as "Dynamic_Color",                    -- Zum Vergleich
+    ec.dynamic_text_color as "Dynamic_TextColor",      -- Zum Vergleich
+    
+    -- Direktes Pivot mit der Original-Berechnung
+    ROUND(SUM(CASE WHEN s.day_abbrev = 'Mo' THEN EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 ELSE 0 END), 1) as "Montag",
+    
+    ROUND(SUM(CASE WHEN s.day_abbrev = 'Di' THEN EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 ELSE 0 END), 1) as "Dienstag",
+    
+    ROUND(SUM(CASE WHEN s.day_abbrev = 'Mi' THEN EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 ELSE 0 END), 1) as "Mittwoch",
+    
+    ROUND(SUM(CASE WHEN s.day_abbrev = 'Do' THEN EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 ELSE 0 END), 1) as "Donnerstag",
+    
+    ROUND(SUM(CASE WHEN s.day_abbrev = 'Fr' THEN EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 ELSE 0 END), 1) as "Freitag",
+    
+    -- Gesamtzeit
+    ROUND(SUM(EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60), 1) as "Gesamt",
+    
+    -- Stunden:Minuten Format
+    CONCAT(
+        FLOOR(SUM(EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60) / 60), 
+        'h ', 
+        LPAD(ROUND(SUM(EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60) % 60)::text, 2, '0'), 
+        'm'
+    ) as "Gesamt Stunden"
+
+FROM public.schedule s
+INNER JOIN public.employees e ON s.employee_id = e.id
+INNER JOIN public.tasks t ON s.task_id = t.id
+LEFT JOIN employee_colors ec ON e.id = ec.employee_id
+WHERE
+    t.id = {{TableStatistics.selectedRow.Task_Id || 1}}
+    AND s.employee_id IS NOT NULL
+		AND s.version_id = {{SelectVersion.selectedOptionValue}}
+GROUP BY e.name, e.id, ec.palette_color, ec.bg_color, ec.palette_text_color, ec.dynamic_text_color
+HAVING SUM(EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60) > 0
+ORDER BY e.name;

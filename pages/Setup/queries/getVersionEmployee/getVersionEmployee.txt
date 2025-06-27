@@ -1,0 +1,4 @@
+SELECT DISTINCT p.id, p.version_name FROM public."planning_versions" p
+INNER JOIN public.schedule s
+	ON s.version_id = p.id
+where s.employee_id = {{SelectEmployee.selectedOptionValue}}

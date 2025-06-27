@@ -1,0 +1,233 @@
+WITH
+-- Zeitraster definieren (15-Minuten-Slots von 8:00 bis 18:00)
+time_grid AS (
+  SELECT
+    d.day_abbrev,
+    e.id as employee_id,
+    r.id as room_id,
+    t.slot_time::time as slot_time,
+    (t.slot_time + INTERVAL '15 minutes')::time as slot_end,
+    e.name as employee_name,
+    r.name as room_name
+  FROM (VALUES ('Mo'), ('Di'), ('Mi'), ('Do'), ('Fr')) d(day_abbrev)
+  CROSS JOIN employees e
+  CROSS JOIN rooms r
+  CROSS JOIN (
+    SELECT generate_series(
+      TIMESTAMP '2024-01-01 07:00:00',
+      TIMESTAMP '2024-01-01 18:00:00',
+      '15 minutes'::interval
+    ) as slot_time
+  ) t
+),
+
+-- Alle gebuchten Slots
+booked_slots AS (
+  SELECT
+    s.day_abbrev,
+    s.employee_id,
+    s.room_id,
+    s.start_time,
+    s.end_time,
+    t.name as task_name,
+    t.color as task_color,
+    e.name as employee_name,
+    r.name as room_name
+  FROM schedule s
+  LEFT JOIN tasks t ON s.task_id = t.id
+  LEFT JOIN employees e ON s.employee_id = e.id
+  LEFT JOIN rooms r ON s.room_id = r.id
+  WHERE t.name IS NOT NULL
+    AND s.task_id <> 7
+		AND s.version_id = {{SelectVersion.selectedOptionValue}}
+),
+
+-- Alle Slots mit Buchungsstatus
+all_slots AS (
+  SELECT
+    tg.day_abbrev,
+    tg.employee_id,
+    tg.room_id,
+    tg.slot_time,
+    tg.slot_end,
+    tg.employee_name,
+    tg.room_name,
+    bs.task_name,
+    bs.task_color,
+    CASE
+      WHEN bs.task_name IS NOT NULL THEN 'GEBUCHT'
+      ELSE 'FREI'
+    END as slot_status
+  FROM time_grid tg
+  LEFT JOIN booked_slots bs ON (
+    tg.day_abbrev = bs.day_abbrev AND
+    tg.employee_id = bs.employee_id AND
+    tg.room_id = bs.room_id AND
+    tg.slot_time >= bs.start_time AND
+    tg.slot_time < bs.end_time
+  )
+),
+
+-- Task-Buchungen mit Details (Erweitert um productivity)
+task_bookings AS (
+  SELECT
+    s.task_id,
+    s.employee_id,
+    s.room_id,
+    s.day_abbrev,
+    s.start_time,
+    s.end_time,
+    t.name as task_name,
+    t.color as task_color,
+    t.productivity, -- Neue Spalte hinzugefügt (Hier von 't' = tasks)
+    e.name as employee_name,
+    r.name as room_name,
+    EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 60 as duration_minutes,
+    ROUND(EXTRACT(EPOCH FROM (s.end_time - s.start_time)) / 3600.0, 2) as duration_hours
+  FROM schedule s
+  LEFT JOIN tasks t ON s.task_id = t.id
+  LEFT JOIN employees e ON s.employee_id = e.id
+  LEFT JOIN rooms r ON s.room_id = r.id
+  WHERE t.name IS NOT NULL
+  AND s.task_id <> 7
+	AND s.version_id = {{SelectVersion.selectedOptionValue}}
+),
+
+-- Original Task-Statistiken (Gruppiert nach productivity)
+task_stats AS (
+  SELECT
+    task_name,
+    task_color,
+    task_id,
+    tb1.productivity, -- Korrigiert: Eindeutige Referenzierung von tb1 (aus task_bookings)
+    COUNT(*) as total_bookings,
+    COUNT(DISTINCT employee_id) as unique_employees,
+    COUNT(DISTINCT room_id) as unique_rooms,
+    COUNT(DISTINCT day_abbrev) as days_used,
+    SUM(duration_hours) as total_hours,
+    AVG(duration_hours) as avg_duration_hours,
+    MIN(duration_hours) as min_duration_hours,
+    MAX(duration_hours) as max_duration_hours,
+    COUNT(CASE WHEN day_abbrev = 'Mo' THEN 1 END) as montag_count,
+    COUNT(CASE WHEN day_abbrev = 'Di' THEN 1 END) as dienstag_count,
+    COUNT(CASE WHEN day_abbrev = 'Mi' THEN 1 END) as mittwoch_count,
+    COUNT(CASE WHEN day_abbrev = 'Do' THEN 1 END) as donnerstag_count,
+    COUNT(CASE WHEN day_abbrev = 'Fr' THEN 1 END) as freitag_count,
+    (SELECT day_abbrev FROM task_bookings tb2
+     WHERE tb2.task_name = tb1.task_name AND tb2.productivity = tb1.productivity
+     GROUP BY day_abbrev ORDER BY COUNT(*) DESC LIMIT 1) as most_popular_day,
+    (SELECT employee_name FROM task_bookings tb3
+     WHERE tb3.task_name = tb1.task_name AND tb3.productivity = tb1.productivity AND tb3.employee_name IS NOT NULL
+     GROUP BY employee_name ORDER BY COUNT(*) DESC LIMIT 1) as most_frequent_employee,
+    (SELECT room_name FROM task_bookings tb4
+     WHERE tb4.task_name = tb1.task_name AND tb4.productivity = tb1.productivity AND tb4.room_name IS NOT NULL
+     GROUP BY room_name ORDER BY COUNT(*) DESC LIMIT 1) as most_frequent_room,
+    CASE
+      WHEN t.color IS NULL THEN '#2D3748'
+      WHEN LENGTH(t.color) != 7 OR SUBSTRING(t.color, 1, 1) != '#' THEN '#2D3748'
+      ELSE
+        CASE
+          -- Helligkeit der Hintergrundfarbe berechnen (Luminance-Formel)
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 180 THEN '#1A202C'  -- Sehr dunkler Text für sehr helle Farben
+          WHEN (
+            (('x' || SUBSTRING(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+            (('x' || SUBSTRING(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+            (('x' || SUBSTRING(t.color, 6, 2))::bit(8)::INTEGER * 114)
+          ) / 1000 > 140 THEN '#2D3748'  -- Dunkler Text für helle Farben
+          -- Für mittlere Farben (wie Violett) → Weißer Text für besseren Kontrast
+          ELSE '#FFFFFF'  -- Weißer Text für dunkle und mittlere Farben
+        END
+    END as text_color
+  FROM task_bookings tb1
+    INNER JOIN tasks t
+        ON tb1.task_id=t.id
+  GROUP BY task_name, task_color, task_id, tb1.productivity, t.color -- Korrigiert: tb1.productivity in GROUP BY
+),
+
+-- Alle Statistiken kombinieren
+combined_stats AS (
+  SELECT * FROM task_stats
+),
+
+overall_stats AS (
+  SELECT
+    SUM(total_bookings) as grand_total_bookings,
+    SUM(total_hours) as grand_total_hours
+  FROM combined_stats
+)
+
+-- HAUPTABFRAGE: Vollständige Auswertung inklusive Gap-Analyse
+SELECT
+  cs.task_name as "Task_Name",
+  cs.task_id as "Task_Id",
+  cs.task_color as "Task_Farbe",
+  cs.text_color as "Text_Color",
+  CASE
+    WHEN cs.productivity IS TRUE THEN 'Produktiv'
+    WHEN cs.productivity IS FALSE THEN 'Nicht Produktiv'
+    ELSE 'Unbekannt' -- Für den Fall, dass productivity NULL sein könnte
+  END as "Produktivität_Kategorie", -- Neue Spalte für die Gruppierung
+  -- HÄUFIGKEITS-DATEN
+  cs.total_bookings as "Buchungen_Gesamt",
+  ROUND((cs.total_bookings * 100.0 / os.grand_total_bookings), 2) as "Anteil_Prozent",
+
+  -- ZEIT-STATISTIKEN
+  ROUND(cs.total_hours, 2) as "Stunden_Gesamt",
+  ROUND(cs.avg_duration_hours, 2) as "Durchschnitt_Stunden",
+  ROUND(cs.min_duration_hours, 2) as "Min_Stunden",
+  ROUND(cs.max_duration_hours, 2) as "Max_Stunden",
+
+  -- RESSOURCEN-NUTZUNG
+  cs.unique_employees as "Verschiedene_Mitarbeiter",
+  cs.unique_rooms as "Verschiedene_Raeume",
+  cs.days_used as "Genutzte_Wochentage",
+
+  -- WOCHENTAG-VERTEILUNG
+  cs.montag_count as "Mo",
+  cs.dienstag_count as "Di",
+  cs.mittwoch_count as "Mi",
+  cs.donnerstag_count as "Do",
+  cs.freitag_count as "Fr",
+  cs.most_popular_day as "Beliebtester_Tag",
+
+  -- TOP-ZUWEISUNGEN
+  cs.most_frequent_employee as "Hauptmitarbeiter",
+  cs.most_frequent_room as "Hauptraum",
+
+  -- RANKING
+  RANK() OVER (ORDER BY cs.total_bookings DESC) as "Rang_Haeufigkeit",
+  RANK() OVER (ORDER BY cs.total_hours DESC) as "Rang_Stunden",
+
+  -- KATEGORIE
+  CASE
+    WHEN cs.task_name = 'PATIENTENZEIT_VERFÜGBAR' THEN 'Verfügbare Patientenzeit'
+    WHEN cs.task_name = 'EINZELNER_FREIER_SLOT' THEN 'Einzelne freie Slots'
+    WHEN cs.total_bookings >= 10 THEN 'Sehr häufig'
+    WHEN cs.total_bookings >= 5 THEN 'Häufig'
+    WHEN cs.total_bookings >= 2 THEN 'Gelegentlich'
+    ELSE 'Selten'
+  END as "Kategorie",
+
+  -- ZUSÄTZLICHE PATIENTENZEIT-INFO
+  CASE
+    WHEN cs.task_name = 'PATIENTENZEIT_VERFÜGBAR' THEN
+      ROUND(cs.total_hours / 0.5, 0) || ' mögliche Patiententermine'
+    WHEN cs.task_name = 'EINZELNER_FREIER_SLOT' THEN
+      cs.total_bookings || ' nicht nutzbare 15-Min-Slots'
+    ELSE NULL
+  END as "Zusatz_Info"
+
+FROM combined_stats cs
+CROSS JOIN overall_stats os
+ORDER BY
+  CASE
+    WHEN cs.productivity IS TRUE THEN 1
+    WHEN cs.productivity IS FALSE THEN 2
+    ELSE 3 -- Unbekannte Produktivität zuletzt
+  END,
+  cs.total_bookings DESC,
+  cs.total_hours DESC;

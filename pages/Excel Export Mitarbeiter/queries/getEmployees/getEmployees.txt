@@ -1,0 +1,7 @@
+SELECT e.*, t.name AS "Teamname" FROM public."employees" e
+
+INNER JOIN public.teams t
+	ON t.id=e.team_id
+
+
+order by e.name

@@ -1,0 +1,3 @@
+SELECT * FROM public."employees" 
+{{ SelectTeam.selectedOptionValue ? "WHERE team_id = " + SelectTeam.selectedOptionValue : "" }}
+ORDER BY name;

@@ -1,0 +1,2 @@
+INSERT INTO public."teams" ("name")
+  VALUES ('{{TableTeam.newRow.name}}');

@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "685e483118280a5cf36d2a8a_eccbec34-7c65-4589-a7bb-b42473868b62",
+  "id": "Excel Export Räume_roomExcelExport",
+  "unpublishedCollection": {
+    "name": "roomExcelExport",
+    "pageId": "Excel Export Räume",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

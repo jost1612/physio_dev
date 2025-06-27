@@ -1,0 +1,151 @@
+WITH timeslots AS (
+  -- 15-Minuten Timeslots ab 07:00 (erweitert!)
+  SELECT time_slot, to_char(time_slot, 'HH24:MI') as time_display
+  FROM (VALUES 
+    -- 07:00 Stunde
+    ('07:00'::time), ('07:15'::time), ('07:30'::time), ('07:45'::time),
+    -- 08:00 Stunde
+    ('08:00'::time), ('08:15'::time), ('08:30'::time), ('08:45'::time),
+    -- 09:00 Stunde
+    ('09:00'::time), ('09:15'::time), ('09:30'::time), ('09:45'::time),
+    -- 10:00 Stunde
+    ('10:00'::time), ('10:15'::time), ('10:30'::time), ('10:45'::time),
+    -- 11:00 Stunde
+    ('11:00'::time), ('11:15'::time), ('11:30'::time), ('11:45'::time),
+    -- 12:00 Stunde
+    ('12:00'::time), ('12:15'::time), ('12:30'::time), ('12:45'::time),
+    -- 13:00 Stunde
+    ('13:00'::time), ('13:15'::time), ('13:30'::time), ('13:45'::time),
+    -- 14:00 Stunde
+    ('14:00'::time), ('14:15'::time), ('14:30'::time), ('14:45'::time),
+    -- 15:00 Stunde
+    ('15:00'::time), ('15:15'::time), ('15:30'::time), ('15:45'::time),
+    -- 16:00 Stunde
+    ('16:00'::time), ('16:15'::time), ('16:30'::time), ('16:45'::time),
+    -- 17:00 Stunde
+    ('17:00'::time), ('17:15'::time), ('17:30'::time), ('17:45'::time),
+    -- 18:00 Stunde
+    ('18:00'::time), ('18:15'::time), ('18:30'::time), ('18:45'::time),
+		-- 19:00 Stunde
+    ('19:00'::time), ('19:15'::time), ('19:30'::time), ('19:45'::time)
+  ) AS t(time_slot)
+),
+
+schedule_with_tasks AS (
+  -- Schedule mit Task-Daten, Farben und EMPLOYEE FILTER
+  SELECT 
+    s.day_abbrev,
+    s.start_time,
+    s.end_time,
+    s.task_id,
+    s.employee_id,
+    t.name as task_name,
+    t.color as task_color,
+    e.name as employee_name,
+    s.room_id,
+    r.name as room_name,
+    -- Textfarbe berechnen
+    CASE 
+      WHEN t.color IS NULL THEN '#000000'
+      WHEN (
+        (('x' || substring(t.color, 2, 2))::bit(8)::INTEGER * 299) +
+        (('x' || substring(t.color, 4, 2))::bit(8)::INTEGER * 587) +
+        (('x' || substring(t.color, 6, 2))::bit(8)::INTEGER * 114)
+      ) / 1000 > 128 
+      THEN '#000000' 
+      ELSE '#FFFFFF' 
+    END as text_color
+  FROM schedule s
+  LEFT JOIN tasks t ON s.task_id = t.id
+  LEFT JOIN employees e ON s.employee_id = e.id
+  LEFT JOIN rooms r ON s.room_id = r.id
+	LEFT JOIN planning_versions p ON p.id = s.version_id
+  -- WICHTIGE ÄNDERUNG: Parameter statt feste SelectBox
+  WHERE s.employee_id = {{this.params.employeeId}}
+	AND p.is_active = true
+),
+
+slot_assignments AS (
+  -- Timeslots mit gefilterten Tasks verknüpfen
+  SELECT 
+    ts.time_slot,
+    ts.time_display,
+    days.day_abbrev as day_abbrev,
+    swt.task_name,
+    swt.task_color,
+    swt.text_color,
+    swt.employee_name,
+    swt.employee_id,
+    swt.room_name
+  FROM timeslots ts
+  CROSS JOIN (
+    VALUES ('Mo'), ('Di'), ('Mi'), ('Do'), ('Fr')
+  ) AS days(day_abbrev)
+  LEFT JOIN schedule_with_tasks swt ON 
+    swt.day_abbrev = days.day_abbrev
+    AND ts.time_slot >= swt.start_time 
+    AND ts.time_slot < swt.end_time
+)
+
+-- FINAL MATRIX - TASK-NAMEN IN ZELLEN
+SELECT 
+  time_display as "Zeit",
+  
+  -- Montag (Mo)
+  MAX(CASE WHEN day_abbrev = 'Mo' THEN 
+    COALESCE(task_name, '') 
+  END) as "Mo",
+  MAX(CASE WHEN day_abbrev = 'Mo' THEN 
+    COALESCE(task_color, '#F8F9FA') 
+  END) as "Mo_Color",
+  MAX(CASE WHEN day_abbrev = 'Mo' THEN 
+    COALESCE(text_color, '#000000') 
+  END) as "Mo_TextColor",
+  
+  -- Dienstag (Di)
+  MAX(CASE WHEN day_abbrev = 'Di' THEN 
+    COALESCE(task_name, '') 
+  END) as "Di",
+  MAX(CASE WHEN day_abbrev = 'Di' THEN 
+    COALESCE(task_color, '#F8F9FA') 
+  END) as "Di_Color",
+  MAX(CASE WHEN day_abbrev = 'Di' THEN 
+    COALESCE(text_color, '#000000') 
+  END) as "Di_TextColor",
+  
+  -- Mittwoch (Mi)
+  MAX(CASE WHEN day_abbrev = 'Mi' THEN 
+    COALESCE(task_name, '') 
+  END) as "Mi",
+  MAX(CASE WHEN day_abbrev = 'Mi' THEN 
+    COALESCE(task_color, '#F8F9FA') 
+  END) as "Mi_Color", 
+  MAX(CASE WHEN day_abbrev = 'Mi' THEN 
+    COALESCE(text_color, '#000000') 
+  END) as "Mi_TextColor",
+  
+  -- Donnerstag (Do)
+  MAX(CASE WHEN day_abbrev = 'Do' THEN 
+    COALESCE(task_name, '') 
+  END) as "Do",
+  MAX(CASE WHEN day_abbrev = 'Do' THEN 
+    COALESCE(task_color, '#F8F9FA') 
+  END) as "Do_Color",
+  MAX(CASE WHEN day_abbrev = 'Do' THEN 
+    COALESCE(text_color, '#000000') 
+  END) as "Do_TextColor",
+  
+  -- Freitag (Fr)
+  MAX(CASE WHEN day_abbrev = 'Fr' THEN 
+    COALESCE(task_name, '') 
+  END) as "Fr", 
+  MAX(CASE WHEN day_abbrev = 'Fr' THEN 
+    COALESCE(task_color, '#F8F9FA') 
+  END) as "Fr_Color",
+  MAX(CASE WHEN day_abbrev = 'Fr' THEN 
+    COALESCE(text_color, '#000000') 
+  END) as "Fr_TextColor"
+
+FROM slot_assignments
+GROUP BY time_slot, time_display
+ORDER BY time_slot;
